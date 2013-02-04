@@ -1,0 +1,15 @@
+main
+	main_init
+		___init_core___
+	UART1_Init
+	Mul_32x32_U
+	Div_32x32_U
+	Longword2Double
+		NRM4032
+			SETFUN32
+			FIXSIGN32
+			SETFOV32
+			RES032
+	Double2Byte
+		SETIOV3224
+	UART1_Write
