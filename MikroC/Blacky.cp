@@ -5,13 +5,26 @@
 
 void ___init_core___();
 void main_init();
-#line 2 "C:/Users/Bangonkali/Desktop/Projects/Blacky/MikroC/Blacky.c"
-unsigned long count_distance[3];
-unsigned char finalcount[3];
-double calculation[3];
-char txt[15];
-char msg[40];
+#line 1 "c:/users/bangonkali/desktop/projects/blacky/mikroc/coreping.h"
 
+
+
+int ReadPing(int *left, int *front, int *right) ;
+#line 1 "c:/users/bangonkali/desktop/projects/blacky/mikroc/blacky.h"
+
+
+
+sbit Echo_L at PORTD.B0;
+sbit Trigger_L at PORTD.B1;
+
+sbit Echo_C at PORTD.B2;
+sbit Trigger_C at PORTD.B3;
+
+sbit Echo_R at PORTD.B4;
+sbit Trigger_R at PORTD.B5;
+
+int left, right, front, err;
+#line 5 "C:/Users/Bangonkali/Desktop/Projects/Blacky/MikroC/Blacky.c"
 void main() {
  ADCON1 |= 0x0F;
  CMCON |= 7;
@@ -26,59 +39,7 @@ void main() {
  Delay_ms(100);
 
  while(1){
- count_distance[0] =0;
- count_distance[2] =0;
- count_distance[1] =0;
-
- LATD = 0x01;
- Delay_us(20);
- LATD = 0x00;
- while (PORTD.RD1 == 0)
- count_distance[0] = 0;
- while (PORTD.RD1 == 1)
- {
- count_distance[0]++;
- }
- if (count_distance[0] > 1000)
- count_distance[0] = 1000;
-
- calculation[0] = (255*count_distance[0]/1000);
- finalcount[0] = calculation[0];
- UART1_Write(finalcount[0]);
-
- LATD = 0x04;
- Delay_us(20);
- LATD = 0x00;
- while (PORTD.RD3 == 0)
- count_distance[1] = 0;
- while (PORTD.RD3 == 1)
- {
- count_distance[1]++;
- }
- if (count_distance[1] > 1000)
- count_distance[1] = 1000;
-
- calculation[1] = (255*count_distance[1]/1000);
- finalcount[1] = calculation[1];
- UART1_Write(finalcount[1]);
-
- LATD = 0x10;
- Delay_us(20);
-
- LATD = 0x00;
- while (PORTD.RD5 == 0)
- count_distance[2] = 0;
- while (PORTD.RD5 == 1)
- {
- count_distance[2]++;
- }
- if (count_distance[2] > 1000)
- count_distance[2] = 1000;
-
- calculation[2] = (255*count_distance[2]/1000);
- finalcount[2] = calculation[2];
- UART1_Write(finalcount[2]);
-
+ err = ReadPing(&left, &front, &right);
 
  UART1_Write(0);
  Delay_ms(1000);

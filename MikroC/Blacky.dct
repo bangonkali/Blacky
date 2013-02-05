@@ -144,7 +144,6 @@ c2inv
 c2inv_bit
 c2out
 c2out_bit
-calculation
 ccp1
 ccp1_bit
 ccp1as
@@ -228,7 +227,6 @@ cmip
 cmip_bit
 comfrem
 compare_double
-count_distance
 crc16ee
 crc16ee_bit
 crc16ef
@@ -326,6 +324,9 @@ eccpas2
 eccpas2_bit
 eccpase
 eccpase_bit
+echo_c
+echo_l
+echo_r
 eeadr
 eecon1
 eecon2
@@ -432,11 +433,11 @@ epstall_uep7_bit
 epstall_uep8_bit
 epstall_uep9_bit
 equals_double
+err
 f
 fast
 ferr
 ferr_bit
-finalcount
 fixsign32
 flts
 flts_bit
@@ -464,6 +465,7 @@ frm8
 frm8_bit
 frm9
 frm9_bit
+front
 fsen
 fsen_bit
 fsr0
@@ -666,6 +668,7 @@ late1
 late1_bit
 late2
 late2_bit
+left
 longint2double
 longjmp
 longword2double
@@ -698,7 +701,6 @@ lvv3
 lvv3_bit
 main
 main_init
-msg
 mul_16x16_s
 mul_16x16_u
 mul_32x32_fp
@@ -996,11 +998,16 @@ re3
 re3_bit
 read_write
 read_write_bit
+readping
+readping_f
+readping_l
+readping_r
 res032
 resume_
 resume__bit
 ri
 ri_bit
+right
 rsen
 rsen_bit
 rx_
@@ -1257,6 +1264,9 @@ toutps2
 toutps2_bit
 toutps3
 toutps3_bit
+trigger_c
+trigger_l
+trigger_r
 trisa
 trisa0
 trisa0_bit
@@ -1358,7 +1368,6 @@ txip
 txip_bit
 txreg
 txsta
-txt
 ua
 ua_bit
 uaddr
