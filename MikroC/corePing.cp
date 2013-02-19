@@ -16,6 +16,8 @@ extern sfr sbit Trigger_R;
 int ReadPing_L();
 int ReadPing_F();
 int ReadPing_R();
+
+int Count_Distance(int cnt, int max, int scale);
 #line 1 "c:/users/bangonkali/desktop/projects/blacky/mikroc/coreping.h"
 
 
@@ -25,8 +27,8 @@ int ReadPing(int *left, int *front, int *right) ;
 int ReadPing(int *left, int *front, int *right)
 {
  *left = ReadPing_L();
- *front = ReadPing_F();
  *right = ReadPing_R();
+ *front = ReadPing_F();
 
  return 0;
 }

@@ -4,8 +4,8 @@
 int ReadPing(int *left, int *front, int *right) 
 {
     *left = ReadPing_L();
-    *front = ReadPing_F();
     *right = ReadPing_R();
+    *front = ReadPing_F();
     
     return 0;
 }

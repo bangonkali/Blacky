@@ -10,18 +10,18 @@ _ReadPing:
 	MOVWF       POSTINC1+0 
 	MOVF        R1, 0 
 	MOVWF       POSTINC1+0 
-;corePing.c,7 :: 		*front = ReadPing_F();
-	CALL        _ReadPing_F+0, 0
-	MOVFF       FARG_ReadPing_front+0, FSR1
-	MOVFF       FARG_ReadPing_front+1, FSR1H
+;corePing.c,7 :: 		*right = ReadPing_R();
+	CALL        _ReadPing_R+0, 0
+	MOVFF       FARG_ReadPing_right+0, FSR1
+	MOVFF       FARG_ReadPing_right+1, FSR1H
 	MOVF        R0, 0 
 	MOVWF       POSTINC1+0 
 	MOVF        R1, 0 
 	MOVWF       POSTINC1+0 
-;corePing.c,8 :: 		*right = ReadPing_R();
-	CALL        _ReadPing_R+0, 0
-	MOVFF       FARG_ReadPing_right+0, FSR1
-	MOVFF       FARG_ReadPing_right+1, FSR1H
+;corePing.c,8 :: 		*front = ReadPing_F();
+	CALL        _ReadPing_F+0, 0
+	MOVFF       FARG_ReadPing_front+0, FSR1
+	MOVFF       FARG_ReadPing_front+1, FSR1H
 	MOVF        R0, 0 
 	MOVWF       POSTINC1+0 
 	MOVF        R1, 0 

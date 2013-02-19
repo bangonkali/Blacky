@@ -6,7 +6,7 @@ Value=-1
 [BUILD_TYPE]
 Value=0
 [ACTIVE_TAB]
-Value=corePing.c
+Value=Blacky.c
 [USE_EEPROM]
 Value=0
 [USE_HEAP]
@@ -28,9 +28,9 @@ Count=0
 ActiveImageIndex=-1
 [OPENED_FILES]
 Count=4
-File0=corePing.c
-File1=libPing.c
-File2=libping.h
+File0=libPing.c
+File1=libPing.h
+File2=Blacky.h
 File3=Blacky.c
 [EEPROM]
 Count=0
@@ -55,8 +55,9 @@ File3=corePing.h
 [PLDS]
 Count=0
 [Useses]
-Count=1
+Count=2
 File0=UART
+File1=Software_UART
 [EXPANDED NODES]
 Node1=Sources
 Node2=Header Files

@@ -2,9 +2,28 @@ main
 	main_init
 		___init_core___
 	UART1_Init
+	Soft_UART_Init
+		Get_Fosc_kHz
+		Mul_32x32_U
+		Div_32x32_S
+			SDIV3232L
+			COMFREM
 	ReadPing
 		ReadPing_L
-			Mul_16x16_U
-			Div_16x16_S
-				Div_16x16_S_L
+			Count_Distance
+				Mul_16x16_U
+				Div_16x16_S
+					Div_16x16_S_L
+		ReadPing_R
+			Count_Distance
+				Mul_16x16_U
+				Div_16x16_S
+					Div_16x16_S_L
+		ReadPing_F
+			Count_Distance
+				Mul_16x16_U
+				Div_16x16_S
+					Div_16x16_S_L
 	UART1_Write
+	Soft_UART_Read
+		Delay_Cyc

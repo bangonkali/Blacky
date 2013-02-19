@@ -227,6 +227,7 @@ cmip
 cmip_bit
 comfrem
 compare_double
+count_distance
 crc16ee
 crc16ee_bit
 crc16ef
@@ -324,7 +325,7 @@ eccpas2
 eccpas2_bit
 eccpase
 eccpase_bit
-echo_c
+echo_f
 echo_l
 echo_r
 eeadr
@@ -1046,6 +1047,12 @@ sofie
 sofie_bit
 sofif
 sofif_bit
+soft_uart_break
+soft_uart_error
+soft_uart_init
+soft_uart_read
+soft_uart_read_error
+soft_uart_write
 spbrg
 spbrgh
 spen
@@ -1208,6 +1215,7 @@ tblptr
 tblptrh
 tblptrl
 tblptru
+test
 tmr0h
 tmr0ie
 tmr0ie_bit
@@ -1264,7 +1272,7 @@ toutps2
 toutps2_bit
 toutps3
 toutps3_bit
-trigger_c
+trigger_f
 trigger_l
 trigger_r
 trisa
