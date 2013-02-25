@@ -24,6 +24,9 @@ void main() {
         UART1_Write(left);
         UART1_Write(front);
         UART1_Write(right);
+        
+        
+        
         UART1_Write(0x00);
         UART1_Write(0x0D);
         UART1_Write(0x0A);

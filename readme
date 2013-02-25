@@ -1,0 +1,9 @@
+Project Blacky
+
+Blacky is a semi-autonomous direction aware and collision avoiding robot. Blacky has 3 Ultrasonic Distance Sensors, 1 Digital Compass and 2 DC Motors. It is on a E-Gizmo PBOT Chassis, and is powered by a 6 AA Batteries and a separte 9V Battery for the onboard PIC18F4550 Microcontroller.
+
+Blacky can communicate wirelessly for 500 Meters from the base station and can transmit data at 9600 baudrate using JZ863 RF Module. Blacky also has output RX/TX that can be wired directly for the debugging devices that may be attached to it. Furthermore Blacky has an Input Port for the PICKIT 3 Programmer from Microchip.
+
+At initialization, Blacky will save the current direction with respect to the true North. When this is saved, Blacky will begin moving forward. If one of the 3 Ultrasonic Devices detect objects that block Blacky's path, Blacky will turn left or right depending on which of the two sensors have the furthest unblocked path. If both sensors does not register a blockage, the Blacky will take Right. 
+
+If Blacky takes the right direction, the left sensor will continue to scan if the Blocking object is still in view, if not, Blacky will return to the original dircetion as saved in the beginning. Blacky can control its speed depending on the distance of the Blocking Object. If the blocking object is far away, then Blacky will move forward faster, otherwise slower. weh katulgon na ko sunod na ni...
