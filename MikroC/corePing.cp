@@ -17,7 +17,7 @@ int ReadPing_L();
 int ReadPing_F();
 int ReadPing_R();
 
-int Count_Distance(int cnt, int max, int scale);
+int Count_Distance(double cnt, double max, double scale);
 #line 1 "c:/users/bangonkali/desktop/projects/blacky/mikroc/coreping.h"
 
 

@@ -13,13 +13,12 @@ int ReadPing_L() {
     {
         //UART1_Write(0x42); // signal B
     }
-    count_distance = 0;
     while (Echo_L == 1)
     {
         count_distance++;
         //UART1_Write(0x43); // signal C
     }
-    return Count_Distance(count_distance, MaxDistance, MaxDistanceScaled);
+    return Count_Distance((double)count_distance, (double)MaxDistance, (double)MaxDistanceScaled);
 }
 
 int ReadPing_R() {
@@ -35,13 +34,12 @@ int ReadPing_R() {
     {
         //UART1_Write(0x46); // signal F
     }
-    count_distance = 0;
     while (Echo_R == 1)
     {
         count_distance++;
         //UART1_Write(0x47); // signal E
     }
-    return Count_Distance(count_distance, MaxDistance, MaxDistanceScaled);
+    return Count_Distance((double)count_distance, (double)MaxDistance, (double)MaxDistanceScaled);
 }
 
 int ReadPing_F() {
@@ -56,19 +54,18 @@ int ReadPing_F() {
     {
         //UART1_Write(0x50); // signal P
     }
-    count_distance = 0;
     while (Echo_F == 1)
     {
         count_distance++;
         //UART1_Write(0x49); // signal G
     }
     
-    return Count_Distance(count_distance, MaxDistance, MaxDistanceScaled);
+    return Count_Distance((double)count_distance, (double)MaxDistance, (double)MaxDistanceScaled);
 }
 
-int Count_Distance(int cnt, int max, int scale) {
+int Count_Distance(double cnt, double max, double scale) {
     if (cnt > max)
         cnt = max;
 
-    return (scale*cnt/max);
+    return (int)(scale*(cnt/max));
 }

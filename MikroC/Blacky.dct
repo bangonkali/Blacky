@@ -25,6 +25,7 @@ abden
 abden_bit
 abdovf
 abdovf_bit
+abs
 access
 ackdt
 ackdt_bit
@@ -97,6 +98,9 @@ an3
 an3_bit
 an4
 an4_bit
+atof
+atoi
+atol
 b0
 b1
 b2
@@ -299,6 +303,7 @@ dfn8ef
 dfn8ef_bit
 dir_
 dir__bit
+div
 div_16x16_s
 div_16x16_s_l
 div_16x16_u
@@ -439,6 +444,7 @@ f
 fast
 ferr
 ferr_bit
+finddatafrombuffer
 fixsign32
 flts
 flts_bit
@@ -600,8 +606,19 @@ ircf2
 ircf2_bit
 irvst
 irvst_bit
+isalnum
+isalpha
+iscntrl
+isdigit
+isgraph
+islower
+ispunct
+isspace
+isupper
+isxdigit
 ivrst
 ivrst_bit
+labs
 lata
 lata0
 lata0_bit
@@ -669,6 +686,7 @@ late1
 late1_bit
 late2
 late2_bit
+ldiv
 left
 longint2double
 longjmp
@@ -702,6 +720,8 @@ lvv3
 lvv3_bit
 main
 main_init
+max
+min
 mul_16x16_s
 mul_16x16_u
 mul_32x32_fp
@@ -910,6 +930,7 @@ ra5
 ra5_bit
 ra6
 ra6_bit
+rand
 rb0
 rb0_bit
 rb1
@@ -999,6 +1020,7 @@ re3
 re3_bit
 read_write
 read_write_bit
+readcompass
 readping
 readping_f
 readping_l
@@ -1041,6 +1063,7 @@ setfov32
 setfun32
 setiov3224
 setjmp
+skew
 smp
 smp_bit
 sofie
@@ -1089,6 +1112,7 @@ sppip
 sppip_bit
 sppown
 sppown_bit
+srand
 sren
 sren_bit
 sspadd
@@ -1261,9 +1285,11 @@ tmr3on
 tmr3on_bit
 to_
 to__bit
+tolower
 tosh
 tosl
 tosu
+toupper
 toutps0
 toutps0_bit
 toutps1
@@ -1425,6 +1451,7 @@ ufrmh
 ufrml
 uie
 uir
+uldiv
 uoemon
 uoemon_bit
 upuen
@@ -1482,5 +1509,6 @@ ws3
 ws3_bit
 wue
 wue_bit
+xtoi
 z
 z_bit

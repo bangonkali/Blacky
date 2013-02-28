@@ -7,7 +7,8 @@ void setup() {
 void loop() {
   // print the string when a newline arrives:
   while (Serial1.available() ) {
-    Serial.print(Serial1.read());
+    char d=Serial1.read();
+    Serial.write(d);
   }
 }
 

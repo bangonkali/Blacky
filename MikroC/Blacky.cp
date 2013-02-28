@@ -5,6 +5,12 @@
 
 void ___init_core___();
 void main_init();
+#line 1 "c:/users/bangonkali/desktop/projects/blacky/mikroc/libcompass.h"
+
+
+
+int ReadCompass(char);
+int FindDataFromBuffer(char *buffer, char buffer_length, char data_length);
 #line 1 "c:/users/bangonkali/desktop/projects/blacky/mikroc/coreping.h"
 
 
@@ -28,7 +34,7 @@ int test;
 
 int soft_uart_error;
 int soft_uart_read_error;
-#line 5 "C:/Users/Bangonkali/Desktop/Projects/Blacky/MikroC/Blacky.c"
+#line 6 "C:/Users/Bangonkali/Desktop/Projects/Blacky/MikroC/Blacky.c"
 void main() {
  ADCON1 |= 0x0F;
  CMCON |= 7;
@@ -39,11 +45,10 @@ void main() {
  LATB = 0x00;
  LATD = 0;
 
- UART1_Init(115200);
+ UART1_Init(9600);
  Delay_ms(100);
 
  test = 0;
- soft_uart_error = Soft_UART_Init(&PORTE, 0, 1, 9600, 0);
 
  while(1){
  err = ReadPing(&left, &front, &right);
@@ -51,21 +56,13 @@ void main() {
  UART1_Write(left);
  UART1_Write(front);
  UART1_Write(right);
- UART1_Write(0x00);
+
  UART1_Write(0x0D);
  UART1_Write(0x0A);
 
- while (Soft_UART_Read(&soft_uart_read_error) != 2){}
- UART1_Write(Soft_UART_Read(&soft_uart_read_error));
- UART1_Write(Soft_UART_Read(&soft_uart_read_error));
- UART1_Write(Soft_UART_Read(&soft_uart_read_error));
+ ReadCompass(1);
 
- UART1_Write(0xFF);
- UART1_Write(0x00);
- UART1_Write(0x0D);
- UART1_Write(0x0A);
-
- Delay_ms(5000);
+ Delay_ms(1000);
 
  if (test == 0) {
  PORTB = 0xFF;

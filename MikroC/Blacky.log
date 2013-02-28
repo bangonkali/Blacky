@@ -1,28 +1,40 @@
-0	1	mikroCPIC1618.exe -MSF -DBG -pP18F4550 -RA -GC -C -DL -O11111114 -fo8 -N"C:\Users\Bangonkali\Desktop\Projects\Blacky\MikroC\Blacky.mcppi" -SP"C:\Users\Public\Documents\Mikroelektronika\mikroC PRO for PIC\defs\" -SP"C:\Users\Public\Documents\Mikroelektronika\mikroC PRO for PIC\uses\P18\" -SP"C:\Users\Bangonkali\Desktop\Projects\Blacky\MikroC\" -IP"C:\Users\Bangonkali\Desktop\Projects\Blacky\MikroC\" "Blacky.c" "PIC18F4550lib.c" "libPing.c" "corePing.c" "__Lib_Math.mcl" "__Lib_MathDouble.mcl" "__Lib_System.mcl" "__Lib_Delays.mcl" "__Lib_SoftUART.mcl" "__Lib_UART_c67.mcl"	 
+0	1	mikroCPIC1618.exe -MSF -DBG -pP18F4550 -GC -C -DL -O11111114 -fo8 -N"C:\Users\Bangonkali\Desktop\Projects\Blacky\MikroC\Blacky.mcppi" -SP"C:\Users\Public\Documents\Mikroelektronika\mikroC PRO for PIC\defs\" -SP"C:\Users\Public\Documents\Mikroelektronika\mikroC PRO for PIC\uses\P18\" -SP"C:\Users\Bangonkali\Desktop\Projects\Blacky\MikroC\" -IP"C:\Users\Bangonkali\Desktop\Projects\Blacky\MikroC\" "Blacky.c" "PIC18F4550lib.c" "libPing.c" "corePing.c" "libBlacky.c" "libCompass.c" "__Lib_Math.mcl" "__Lib_MathDouble.mcl" "__Lib_System.mcl" "__Lib_Delays.mcl" "__Lib_CType.mcl" "__Lib_CStdlib.mcl" "__Lib_SoftUART.mcl" "__Lib_UART_c67.mcl"	 
 hint: 0	1139	Available RAM: 2027 [bytes], Available ROM: 32768 [bytes]	 
-diagnostics: 0	122	Compilation Started	P18F4550.c
-diagnostics: 1610	123	Compiled Successfully	P18F4550.c
-diagnostics: 0	122	Compilation Started	__Lib_Delays.c
-diagnostics: 172	123	Compiled Successfully	__Lib_Delays.c
-diagnostics: 0	126	All files Preprocessed in 359 ms	 
+diagnostics: 0	126	All files Preprocessed in 452 ms	 
 diagnostics: 0	122	Compilation Started	pic18f4550lib.h
-warning: 15	1509	Generated baud rate is 117647 bps (error = 2.12 percent)	Blacky.c
-warning: 31	1505	Suspicious pointer conversion	Blacky.c
-warning: 32	1505	Suspicious pointer conversion	Blacky.c
-warning: 33	1505	Suspicious pointer conversion	Blacky.c
-warning: 34	1505	Suspicious pointer conversion	Blacky.c
-diagnostics: 51	123	Compiled Successfully	Blacky.c
+warning: 16	1509	Generated baud rate is 9615 bps (error = 0.16 percent)	Blacky.c
+diagnostics: 43	123	Compiled Successfully	Blacky.c
 diagnostics: 0	122	Compilation Started	pic18f4550lib.h
 diagnostics: 28	123	Compiled Successfully	PIC18F4550lib.c
 diagnostics: 0	122	Compilation Started	libping.h
-diagnostics: 74	123	Compiled Successfully	libPing.c
+diagnostics: 71	123	Compiled Successfully	libPing.c
 diagnostics: 0	122	Compilation Started	libping.h
 diagnostics: 11	123	Compiled Successfully	corePing.c
-diagnostics: 0	127	All files Compiled in 967 ms	 
-hint: 0	1144	Used RAM (bytes): 66 (3%)  Free RAM (bytes): 1961 (97%)	Used RAM (bytes): 66 (3%)  Free RAM (bytes): 1961 (97%)
-hint: 0	1144	Used ROM (bytes): 2972 (9%)  Free ROM (bytes): 29796 (91%)	Used ROM (bytes): 2972 (9%)  Free ROM (bytes): 29796 (91%)
+diagnostics: 0	122	Compilation Started	libBlacky.c
+diagnostics: 6	123	Compiled Successfully	libBlacky.c
+diagnostics: 0	122	Compilation Started	libblacky.h
+warning: 20	1508	Implicit conversion of int to ptr	libCompass.c
+warning: 21	1508	Implicit conversion of int to ptr	libCompass.c
+warning: 22	1508	Implicit conversion of int to ptr	libCompass.c
+warning: 23	1508	Implicit conversion of int to ptr	libCompass.c
+warning: 24	1508	Implicit conversion of int to ptr	libCompass.c
+warning: 25	1508	Implicit conversion of int to ptr	libCompass.c
+warning: 26	1508	Implicit conversion of int to ptr	libCompass.c
+warning: 27	1508	Implicit conversion of int to ptr	libCompass.c
+warning: 28	1508	Implicit conversion of int to ptr	libCompass.c
+warning: 29	1508	Implicit conversion of int to ptr	libCompass.c
+warning: 30	1508	Implicit conversion of int to ptr	libCompass.c
+warning: 31	1508	Implicit conversion of int to ptr	libCompass.c
+warning: 32	1508	Implicit conversion of int to ptr	libCompass.c
+hint: 10	1163	Variable 'input' has been declared, but not used	libCompass.c
+diagnostics: 71	123	Compiled Successfully	libCompass.c
+hint: 7	1164	Variable 'out_buffer' has been eliminated by optimizer	libCompass.c
+hint: 9	1164	Variable 'loop_count' has been eliminated by optimizer	libCompass.c
+diagnostics: 0	127	All files Compiled in 671 ms	 
+hint: 0	1144	Used RAM (bytes): 87 (4%)  Free RAM (bytes): 1940 (96%)	Used RAM (bytes): 87 (4%)  Free RAM (bytes): 1940 (96%)
+hint: 0	1144	Used ROM (bytes): 5232 (16%)  Free ROM (bytes): 27536 (84%)	Used ROM (bytes): 5232 (16%)  Free ROM (bytes): 27536 (84%)
 diagnostics: 0	125	Project Linked Successfully	Blacky.mcppi
 hint: 0	1004	COFF file successfully generated	COFF file successfully generated
-diagnostics: 0	128	Linked in 780 ms	 
-diagnostics: 0	129	Project 'Blacky.mcppi' completed: 2402 ms	 
-diagnostics: 0	103	Finished successfully: 19 Feb 2013, 11:38:43	Blacky.mcppi
+diagnostics: 0	128	Linked in 889 ms	 
+diagnostics: 0	129	Project 'Blacky.mcppi' completed: 2044 ms	 
+diagnostics: 0	103	Finished successfully: 01 Mar 2013, 03:22:36	Blacky.mcppi

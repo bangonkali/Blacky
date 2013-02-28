@@ -17,7 +17,7 @@ int ReadPing_L();
 int ReadPing_F();
 int ReadPing_R();
 
-int Count_Distance(int cnt, int max, int scale);
+int Count_Distance(double cnt, double max, double scale);
 #line 3 "C:/Users/Bangonkali/Desktop/Projects/Blacky/MikroC/libPing.c"
 int ReadPing_L() {
  int count_distance = 0;
@@ -32,13 +32,12 @@ int ReadPing_L() {
  {
 
  }
- count_distance = 0;
  while (Echo_L == 1)
  {
  count_distance++;
 
  }
- return Count_Distance(count_distance,  2000 ,  255 );
+ return Count_Distance((double)count_distance, (double) 2000 , (double) 255 );
 }
 
 int ReadPing_R() {
@@ -54,13 +53,12 @@ int ReadPing_R() {
  {
 
  }
- count_distance = 0;
  while (Echo_R == 1)
  {
  count_distance++;
 
  }
- return Count_Distance(count_distance,  2000 ,  255 );
+ return Count_Distance((double)count_distance, (double) 2000 , (double) 255 );
 }
 
 int ReadPing_F() {
@@ -75,19 +73,18 @@ int ReadPing_F() {
  {
 
  }
- count_distance = 0;
  while (Echo_F == 1)
  {
  count_distance++;
 
  }
 
- return Count_Distance(count_distance,  2000 ,  255 );
+ return Count_Distance((double)count_distance, (double) 2000 , (double) 255 );
 }
 
-int Count_Distance(int cnt, int max, int scale) {
+int Count_Distance(double cnt, double max, double scale) {
  if (cnt > max)
  cnt = max;
 
- return (scale*cnt/max);
+ return (int)(scale*(cnt/max));
 }

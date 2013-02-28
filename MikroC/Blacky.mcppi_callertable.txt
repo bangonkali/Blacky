@@ -2,28 +2,93 @@ main
 	main_init
 		___init_core___
 	UART1_Init
-	Soft_UART_Init
-		Get_Fosc_kHz
-		Mul_32x32_U
-		Div_32x32_S
-			SDIV3232L
-			COMFREM
 	ReadPing
 		ReadPing_L
+			Int2Double
+				NRM3232
+					RES032
+					SETFUN32
+					FIXSIGN32
 			Count_Distance
-				Mul_16x16_U
-				Div_16x16_S
-					Div_16x16_S_L
+				Compare_Double
+				Div_32x32_FP
+					SETFDZ32
+					RES032
+					SETFOV32
+					SETFUN32
+				Mul_32x32_FP
+					RES032
+					SETFOV32
+					SETFUN32
+				Double2Int
+					SETIOV3224
 		ReadPing_R
+			Int2Double
+				NRM3232
+					RES032
+					SETFUN32
+					FIXSIGN32
 			Count_Distance
-				Mul_16x16_U
-				Div_16x16_S
-					Div_16x16_S_L
+				Compare_Double
+				Div_32x32_FP
+					SETFDZ32
+					RES032
+					SETFOV32
+					SETFUN32
+				Mul_32x32_FP
+					RES032
+					SETFOV32
+					SETFUN32
+				Double2Int
+					SETIOV3224
 		ReadPing_F
+			Int2Double
+				NRM3232
+					RES032
+					SETFUN32
+					FIXSIGN32
 			Count_Distance
-				Mul_16x16_U
-				Div_16x16_S
-					Div_16x16_S_L
+				Compare_Double
+				Div_32x32_FP
+					SETFDZ32
+					RES032
+					SETFOV32
+					SETFUN32
+				Mul_32x32_FP
+					RES032
+					SETFOV32
+					SETFUN32
+				Double2Int
+					SETIOV3224
 	UART1_Write
-	Soft_UART_Read
-		Delay_Cyc
+	ReadCompass
+		Soft_UART_Init
+			Get_Fosc_kHz
+			Mul_32x32_U
+			Div_32x32_S
+				SDIV3232L
+				COMFREM
+		Soft_UART_Read
+			Delay_Cyc
+		FindDataFromBuffer
+			atoi
+				isdigit
+				Mul_16x16_U
+		Skew
+			Int2Double
+				NRM3232
+					RES032
+					SETFUN32
+					FIXSIGN32
+			Div_32x32_FP
+				SETFDZ32
+				RES032
+				SETFOV32
+				SETFUN32
+			Mul_32x32_FP
+				RES032
+				SETFOV32
+				SETFUN32
+			Double2Byte
+				SETIOV3224
+		UART1_Write
