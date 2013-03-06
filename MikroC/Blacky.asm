@@ -392,13 +392,13 @@ L__main52:
 L__main53:
 	BTFSC       STATUS+0, 0 
 	GOTO        L_main22
-;Blacky.c,67 :: 		TurnRight();
-	CALL        _TurnRight+0, 0
+;Blacky.c,67 :: 		TurnLeft();
+	CALL        _TurnLeft+0, 0
 ;Blacky.c,68 :: 		} else {
 	GOTO        L_main23
 L_main22:
-;Blacky.c,69 :: 		TurnLeft();
-	CALL        _TurnLeft+0, 0
+;Blacky.c,69 :: 		TurnRight();
+	CALL        _TurnRight+0, 0
 ;Blacky.c,70 :: 		}
 L_main23:
 ;Blacky.c,71 :: 		} else if (current_direction > initial_direction) {

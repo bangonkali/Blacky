@@ -64,9 +64,9 @@ void main() {
             if (left > MIN_SAFE_DISTANCE && front > MIN_SAFE_DISTANCE && right > MIN_SAFE_DISTANCE) {
                 if (initial_direction > current_direction) {
                     if (initial_direction - current_direction > 180) {
-                        TurnRight();
-                    } else {
                         TurnLeft();
+                    } else {
+                        TurnRight();
                     }
                 } else if (current_direction > initial_direction) {
                     if (current_direction - initial_direction > 180) {

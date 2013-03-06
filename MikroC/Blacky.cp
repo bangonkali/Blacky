@@ -116,9 +116,9 @@ void main() {
  if (left >  25  && front >  25  && right >  25 ) {
  if (initial_direction > current_direction) {
  if (initial_direction - current_direction > 180) {
- TurnRight();
- } else {
  TurnLeft();
+ } else {
+ TurnRight();
  }
  } else if (current_direction > initial_direction) {
  if (current_direction - initial_direction > 180) {
