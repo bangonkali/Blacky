@@ -1,8 +1,8 @@
 #include "libPing.h"
 
 int ReadPing_L() {
-    int count_distance = 0;
-    TRISD = 0x2A;
+    long count_distance = 0;
+    TRISD = 0x6A;
     
     //UART1_Write(0x41);  // signal A
     
@@ -22,15 +22,15 @@ int ReadPing_L() {
 }
 
 int ReadPing_R() {
-    int count_distance = 0;
-    TRISD = 0x2A;
+    long count_distance = 0;
+    TRISD = 0x6A;
     
     //UART1_Write(0x45); // signal E
     
-    Trigger_R = 1;
+    Trigger_R = 0x01;
     Delay_us(20); // Delay 20us to wait for rising edge.
-    Trigger_R = 0; 
-    while (PORTD == 0)
+    Trigger_R = 0x00; 
+    while (Echo_R == 0)
     {
         //UART1_Write(0x46); // signal F
     }
@@ -43,14 +43,14 @@ int ReadPing_R() {
 }
 
 int ReadPing_F() {
-    int count_distance = 0;
-    TRISD = 0x2A;
+    long count_distance = 0;
+    TRISD = 0x6A;
     //UART1_Write(0x66);
     
-    Trigger_F = 1;
+    Trigger_F = 0x01;
     Delay_us(20); // Delay 20us to wait for rising edge.
-    Trigger_F = 0; 
-    while (PORTD == 0)
+    Trigger_F = 0x00; 
+    while (Echo_F == 0)
     {
         //UART1_Write(0x50); // signal P
     }

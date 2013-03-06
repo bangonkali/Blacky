@@ -246,6 +246,7 @@ csen
 csen_bit
 csrc
 csrc_bit
+current_direction
 cvr0
 cvr0_bit
 cvr1
@@ -542,6 +543,7 @@ idlen_bit
 indf0
 indf1
 indf2
+initial_direction
 int0
 int0_bit
 int0e
@@ -722,6 +724,7 @@ main
 main_init
 max
 min
+moveforward
 mul_16x16_s
 mul_16x16_u
 mul_32x32_fp
@@ -1063,6 +1066,7 @@ setfov32
 setfun32
 setiov3224
 setjmp
+setspeed
 skew
 smp
 smp_bit
@@ -1142,6 +1146,7 @@ stallie
 stallie_bit
 stallif
 stallif_bit
+start
 status
 stkful
 stkful_bit
@@ -1298,6 +1303,7 @@ toutps2
 toutps2_bit
 toutps3
 toutps3_bit
+transmit_rf
 trigger_f
 trigger_l
 trigger_r
@@ -1384,6 +1390,9 @@ tun3
 tun3_bit
 tun4
 tun4_bit
+turn
+turnleft
+turnright
 tx
 tx_bit
 tx9

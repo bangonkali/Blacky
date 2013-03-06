@@ -1,0 +1,9 @@
+C:\Users\Bangonkali\Desktop\Projects\Blacky\BlackyC\BlackyC\bin\Debug\BlackyC.exe
+C:\Users\Bangonkali\Desktop\Projects\Blacky\BlackyC\BlackyC\bin\Debug\BlackyC.pdb
+C:\Users\Bangonkali\Desktop\Projects\Blacky\BlackyC\BlackyC\bin\Debug\AGauge.dll
+C:\Users\Bangonkali\Desktop\Projects\Blacky\BlackyC\BlackyC\bin\Debug\AGauge.pdb
+C:\Users\Bangonkali\Desktop\Projects\Blacky\BlackyC\BlackyC\obj\Debug\BlackyC.frmMain.resources
+C:\Users\Bangonkali\Desktop\Projects\Blacky\BlackyC\BlackyC\obj\Debug\BlackyC.Properties.Resources.resources
+C:\Users\Bangonkali\Desktop\Projects\Blacky\BlackyC\BlackyC\obj\Debug\BlackyC.csproj.GenerateResource.Cache
+C:\Users\Bangonkali\Desktop\Projects\Blacky\BlackyC\BlackyC\obj\Debug\BlackyC.exe
+C:\Users\Bangonkali\Desktop\Projects\Blacky\BlackyC\BlackyC\obj\Debug\BlackyC.pdb

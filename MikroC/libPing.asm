@@ -2,11 +2,13 @@
 _ReadPing_L:
 
 ;libPing.c,3 :: 		int ReadPing_L() {
-;libPing.c,4 :: 		int count_distance = 0;
+;libPing.c,4 :: 		long count_distance = 0;
 	CLRF        ReadPing_L_count_distance_L0+0 
 	CLRF        ReadPing_L_count_distance_L0+1 
-;libPing.c,5 :: 		TRISD = 0x2A;
-	MOVLW       42
+	CLRF        ReadPing_L_count_distance_L0+2 
+	CLRF        ReadPing_L_count_distance_L0+3 
+;libPing.c,5 :: 		TRISD = 0x6A;
+	MOVLW       106
 	MOVWF       TRISD+0 
 ;libPing.c,9 :: 		Trigger_L = 0x01;
 	BSF         Trigger_L+0, BitPos(Trigger_L+0) 
@@ -30,8 +32,12 @@ L_ReadPing_L3:
 	BTFSS       Echo_L+0, BitPos(Echo_L+0) 
 	GOTO        L_ReadPing_L4
 ;libPing.c,18 :: 		count_distance++;
-	INFSNZ      ReadPing_L_count_distance_L0+0, 1 
-	INCF        ReadPing_L_count_distance_L0+1, 1 
+	MOVLW       1
+	ADDWF       ReadPing_L_count_distance_L0+0, 1 
+	MOVLW       0
+	ADDWFC      ReadPing_L_count_distance_L0+1, 1 
+	ADDWFC      ReadPing_L_count_distance_L0+2, 1 
+	ADDWFC      ReadPing_L_count_distance_L0+3, 1 
 ;libPing.c,20 :: 		}
 	GOTO        L_ReadPing_L3
 L_ReadPing_L4:
@@ -40,7 +46,11 @@ L_ReadPing_L4:
 	MOVWF       R0 
 	MOVF        ReadPing_L_count_distance_L0+1, 0 
 	MOVWF       R1 
-	CALL        _Int2Double+0, 0
+	MOVF        ReadPing_L_count_distance_L0+2, 0 
+	MOVWF       R2 
+	MOVF        ReadPing_L_count_distance_L0+3, 0 
+	MOVWF       R3 
+	CALL        _Longint2Double+0, 0
 	MOVF        R0, 0 
 	MOVWF       FARG_Count_Distance_cnt+0 
 	MOVF        R1, 0 
@@ -74,13 +84,15 @@ L_end_ReadPing_L:
 _ReadPing_R:
 
 ;libPing.c,24 :: 		int ReadPing_R() {
-;libPing.c,25 :: 		int count_distance = 0;
+;libPing.c,25 :: 		long count_distance = 0;
 	CLRF        ReadPing_R_count_distance_L0+0 
 	CLRF        ReadPing_R_count_distance_L0+1 
-;libPing.c,26 :: 		TRISD = 0x2A;
-	MOVLW       42
+	CLRF        ReadPing_R_count_distance_L0+2 
+	CLRF        ReadPing_R_count_distance_L0+3 
+;libPing.c,26 :: 		TRISD = 0x6A;
+	MOVLW       106
 	MOVWF       TRISD+0 
-;libPing.c,30 :: 		Trigger_R = 1;
+;libPing.c,30 :: 		Trigger_R = 0x01;
 	BSF         Trigger_R+0, BitPos(Trigger_R+0) 
 ;libPing.c,31 :: 		Delay_us(20); // Delay 20us to wait for rising edge.
 	MOVLW       13
@@ -88,13 +100,11 @@ _ReadPing_R:
 L_ReadPing_R5:
 	DECFSZ      R13, 1, 1
 	BRA         L_ReadPing_R5
-;libPing.c,32 :: 		Trigger_R = 0;
+;libPing.c,32 :: 		Trigger_R = 0x00;
 	BCF         Trigger_R+0, BitPos(Trigger_R+0) 
-;libPing.c,33 :: 		while (PORTD == 0)
+;libPing.c,33 :: 		while (Echo_R == 0)
 L_ReadPing_R6:
-	MOVF        PORTD+0, 0 
-	XORLW       0
-	BTFSS       STATUS+0, 2 
+	BTFSC       Echo_R+0, BitPos(Echo_R+0) 
 	GOTO        L_ReadPing_R7
 ;libPing.c,36 :: 		}
 	GOTO        L_ReadPing_R6
@@ -104,8 +114,12 @@ L_ReadPing_R8:
 	BTFSS       Echo_R+0, BitPos(Echo_R+0) 
 	GOTO        L_ReadPing_R9
 ;libPing.c,39 :: 		count_distance++;
-	INFSNZ      ReadPing_R_count_distance_L0+0, 1 
-	INCF        ReadPing_R_count_distance_L0+1, 1 
+	MOVLW       1
+	ADDWF       ReadPing_R_count_distance_L0+0, 1 
+	MOVLW       0
+	ADDWFC      ReadPing_R_count_distance_L0+1, 1 
+	ADDWFC      ReadPing_R_count_distance_L0+2, 1 
+	ADDWFC      ReadPing_R_count_distance_L0+3, 1 
 ;libPing.c,41 :: 		}
 	GOTO        L_ReadPing_R8
 L_ReadPing_R9:
@@ -114,7 +128,11 @@ L_ReadPing_R9:
 	MOVWF       R0 
 	MOVF        ReadPing_R_count_distance_L0+1, 0 
 	MOVWF       R1 
-	CALL        _Int2Double+0, 0
+	MOVF        ReadPing_R_count_distance_L0+2, 0 
+	MOVWF       R2 
+	MOVF        ReadPing_R_count_distance_L0+3, 0 
+	MOVWF       R3 
+	CALL        _Longint2Double+0, 0
 	MOVF        R0, 0 
 	MOVWF       FARG_Count_Distance_cnt+0 
 	MOVF        R1, 0 
@@ -148,13 +166,15 @@ L_end_ReadPing_R:
 _ReadPing_F:
 
 ;libPing.c,45 :: 		int ReadPing_F() {
-;libPing.c,46 :: 		int count_distance = 0;
+;libPing.c,46 :: 		long count_distance = 0;
 	CLRF        ReadPing_F_count_distance_L0+0 
 	CLRF        ReadPing_F_count_distance_L0+1 
-;libPing.c,47 :: 		TRISD = 0x2A;
-	MOVLW       42
+	CLRF        ReadPing_F_count_distance_L0+2 
+	CLRF        ReadPing_F_count_distance_L0+3 
+;libPing.c,47 :: 		TRISD = 0x6A;
+	MOVLW       106
 	MOVWF       TRISD+0 
-;libPing.c,50 :: 		Trigger_F = 1;
+;libPing.c,50 :: 		Trigger_F = 0x01;
 	BSF         Trigger_F+0, BitPos(Trigger_F+0) 
 ;libPing.c,51 :: 		Delay_us(20); // Delay 20us to wait for rising edge.
 	MOVLW       13
@@ -162,13 +182,11 @@ _ReadPing_F:
 L_ReadPing_F10:
 	DECFSZ      R13, 1, 1
 	BRA         L_ReadPing_F10
-;libPing.c,52 :: 		Trigger_F = 0;
+;libPing.c,52 :: 		Trigger_F = 0x00;
 	BCF         Trigger_F+0, BitPos(Trigger_F+0) 
-;libPing.c,53 :: 		while (PORTD == 0)
+;libPing.c,53 :: 		while (Echo_F == 0)
 L_ReadPing_F11:
-	MOVF        PORTD+0, 0 
-	XORLW       0
-	BTFSS       STATUS+0, 2 
+	BTFSC       Echo_F+0, BitPos(Echo_F+0) 
 	GOTO        L_ReadPing_F12
 ;libPing.c,56 :: 		}
 	GOTO        L_ReadPing_F11
@@ -178,8 +196,12 @@ L_ReadPing_F13:
 	BTFSS       Echo_F+0, BitPos(Echo_F+0) 
 	GOTO        L_ReadPing_F14
 ;libPing.c,59 :: 		count_distance++;
-	INFSNZ      ReadPing_F_count_distance_L0+0, 1 
-	INCF        ReadPing_F_count_distance_L0+1, 1 
+	MOVLW       1
+	ADDWF       ReadPing_F_count_distance_L0+0, 1 
+	MOVLW       0
+	ADDWFC      ReadPing_F_count_distance_L0+1, 1 
+	ADDWFC      ReadPing_F_count_distance_L0+2, 1 
+	ADDWFC      ReadPing_F_count_distance_L0+3, 1 
 ;libPing.c,61 :: 		}
 	GOTO        L_ReadPing_F13
 L_ReadPing_F14:
@@ -188,7 +210,11 @@ L_ReadPing_F14:
 	MOVWF       R0 
 	MOVF        ReadPing_F_count_distance_L0+1, 0 
 	MOVWF       R1 
-	CALL        _Int2Double+0, 0
+	MOVF        ReadPing_F_count_distance_L0+2, 0 
+	MOVWF       R2 
+	MOVF        ReadPing_F_count_distance_L0+3, 0 
+	MOVWF       R3 
+	CALL        _Longint2Double+0, 0
 	MOVF        R0, 0 
 	MOVWF       FARG_Count_Distance_cnt+0 
 	MOVF        R1, 0 

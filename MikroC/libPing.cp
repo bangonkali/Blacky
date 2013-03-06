@@ -20,8 +20,8 @@ int ReadPing_R();
 int Count_Distance(double cnt, double max, double scale);
 #line 3 "C:/Users/Bangonkali/Desktop/Projects/Blacky/MikroC/libPing.c"
 int ReadPing_L() {
- int count_distance = 0;
- TRISD = 0x2A;
+ long count_distance = 0;
+ TRISD = 0x6A;
 
 
 
@@ -41,15 +41,15 @@ int ReadPing_L() {
 }
 
 int ReadPing_R() {
- int count_distance = 0;
- TRISD = 0x2A;
+ long count_distance = 0;
+ TRISD = 0x6A;
 
 
 
- Trigger_R = 1;
+ Trigger_R = 0x01;
  Delay_us(20);
- Trigger_R = 0;
- while (PORTD == 0)
+ Trigger_R = 0x00;
+ while (Echo_R == 0)
  {
 
  }
@@ -62,14 +62,14 @@ int ReadPing_R() {
 }
 
 int ReadPing_F() {
- int count_distance = 0;
- TRISD = 0x2A;
+ long count_distance = 0;
+ TRISD = 0x6A;
 
 
- Trigger_F = 1;
+ Trigger_F = 0x01;
  Delay_us(20);
- Trigger_F = 0;
- while (PORTD == 0)
+ Trigger_F = 0x00;
+ while (Echo_F == 0)
  {
 
  }

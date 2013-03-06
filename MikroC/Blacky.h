@@ -1,6 +1,8 @@
 #ifndef BLACKY_H
 #define BLACKY_H
 
+#define MIN_SAFE_DISTANCE 25
+
 sbit Echo_L at PORTD.B1;
 sbit Trigger_L at LATD.B0;
 
@@ -15,4 +17,8 @@ int test;
 
 int soft_uart_error;
 int soft_uart_read_error;
+int initial_direction;
+int current_direction;
+short start;
+
 #endif

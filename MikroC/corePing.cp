@@ -26,8 +26,8 @@ int ReadPing(int *left, int *front, int *right) ;
 #line 4 "C:/Users/Bangonkali/Desktop/Projects/Blacky/MikroC/corePing.c"
 int ReadPing(int *left, int *front, int *right)
 {
- *left = ReadPing_L();
  *right = ReadPing_R();
+ *left = ReadPing_L();
  *front = ReadPing_F();
 
  return 0;

@@ -2,6 +2,8 @@
 #include "libCompass.h"
 #include "corePing.h"
 #include "Blacky.h"
+#include "libRF.h"
+#include "libMotor.h"
 
 void main() {
     ADCON1 |= 0x0F;
@@ -14,30 +16,78 @@ void main() {
     LATD = 0;
 
     UART1_Init(9600);
+	
+	initial_direction = ReadCompass(0);
+	
     Delay_ms(100);
-
+    MoveForward (7);
     test = 0;
 
+    start = 1;
+    
     while(1){
         err = ReadPing(&left, &front, &right);
+        
+        transmit_rf(1);
+        transmit_rf(left);
+        transmit_rf(2);
+        transmit_rf(right);
+        transmit_rf(3);
+        transmit_rf(front);
+        transmit_rf(4);
+        current_direction = ReadCompass(1);
+        transmit_rf(5);
+        transmit_rf(start);
+        transmit_rf(6);
+        
+        if (start != 0) {
+            if (front < MIN_SAFE_DISTANCE && right >= MIN_SAFE_DISTANCE && left >= MIN_SAFE_DISTANCE) {
+				if (right > left) {
+					TurnRight();
+				}  else {
+					TurnLeft();
+				}
+            }
+            
+            if (right < MIN_SAFE_DISTANCE && front < MIN_SAFE_DISTANCE && left >= MIN_SAFE_DISTANCE) {
+                TurnRight();
+            }
+            
+            if (left < MIN_SAFE_DISTANCE && front < MIN_SAFE_DISTANCE && right >= MIN_SAFE_DISTANCE) {
+                TurnLeft();
+            }
+            
+            if (left < MIN_SAFE_DISTANCE && front < MIN_SAFE_DISTANCE && right < MIN_SAFE_DISTANCE) {
+                MoveForward(0);
+            }
 
-        UART1_Write(left);
-        UART1_Write(front);
-        UART1_Write(right);
+            if (left > MIN_SAFE_DISTANCE && front > MIN_SAFE_DISTANCE && right > MIN_SAFE_DISTANCE) {
+				if (initial_direction > current_direction) {
+					if (initial_direction - current_direction > 180) {
+						TurnRight();
+					} else {
+						TurnLeft();
+					}
+				} else if (current_direction > initial_direction) {
+					if (current_direction - initial_direction > 180) {
+						TurnLeft();
+					} else {
+						TurnRight();
+					}
+				}
+				
+				MoveForward(3);
+            }
+        }
         
-        UART1_Write(0x0D);
-        UART1_Write(0x0A);
-        
-        ReadCompass(1);
-        
-        Delay_ms(1000);
-
         if (test == 0) {
-           PORTB = 0xFF;
+           LATB.B0 = 0x01;
            test = 1;
         } else {
            test = 0;
-           PORTB = 0x00;
+           LATB.B0 = 0x00;
         }
+        
+        //Delay_ms(1000);
     }
 }

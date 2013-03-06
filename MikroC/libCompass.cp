@@ -10,19 +10,24 @@ char Skew(int input, int maximum, int scaled_max);
 
 int ReadCompass(char);
 int FindDataFromBuffer(char *buffer, char buffer_length, char data_length);
-#line 4 "C:/Users/Bangonkali/Desktop/Projects/Blacky/MikroC/libCompass.c"
+#line 1 "c:/users/bangonkali/desktop/projects/blacky/mikroc/librf.h"
+
+
+
+int transmit_rf(char input);
+#line 5 "C:/Users/Bangonkali/Desktop/Projects/Blacky/MikroC/libCompass.c"
 int ReadCompass(char send_serial) {
  char buffer[12] = {0};
  char soft_uart_error;
- char out_buffer[4] = "";
- int out_buffer_integer = 0;
- int loop_count = 0;
- char input;
+ char skewed_output_integer;
+ int out_buffer_integer;
 
  TRISE = 0x09;
  LATE = 0b1001;
 
+
  if (Soft_UART_Init(&PORTE, 0, 1, 9600, 0) == 0) {
+
 
 
 
@@ -44,17 +49,29 @@ int ReadCompass(char send_serial) {
 
 
 
+ Delay_ms(20);
  out_buffer_integer = FindDataFromBuffer(buffer, 12, 7);
+ Delay_ms(20);
 
 
  if (send_serial == 1) {
- UART1_Write(Skew(out_buffer_integer, 360, 255));
- UART1_Write(0x0D);
- UART1_Write(0x0A);
+
+ skewed_output_integer = Skew(out_buffer_integer, 360, 255);
+
+
+
+
+
+
  }
  } else {
- return 0;
+ if (send_serial == 1) {
+ transmit_rf(0xFF);
+ transmit_rf(0xFF);
+ transmit_rf(0xFF);
  }
+ }
+ return 0;
 }
 
 int FindDataFromBuffer(char *buffer, char buffer_length, char data_length) {
@@ -73,6 +90,10 @@ int FindDataFromBuffer(char *buffer, char buffer_length, char data_length) {
  j[1] = buffer[3+i];
  j[2] = buffer[4+i];
  j[3] = '\0';
+
+ transmit_rf(j[0]);
+ transmit_rf(j[1]);
+ transmit_rf(j[2]);
 
  return atoi(j);
  }

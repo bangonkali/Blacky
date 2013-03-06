@@ -20,6 +20,8 @@ int ReadPing(int *left, int *front, int *right) ;
 
 
 
+
+
 sbit Echo_L at PORTD.B1;
 sbit Trigger_L at LATD.B0;
 
@@ -34,7 +36,24 @@ int test;
 
 int soft_uart_error;
 int soft_uart_read_error;
-#line 6 "C:/Users/Bangonkali/Desktop/Projects/Blacky/MikroC/Blacky.c"
+int initial_direction;
+int current_direction;
+short start;
+#line 1 "c:/users/bangonkali/desktop/projects/blacky/mikroc/librf.h"
+
+
+
+int transmit_rf(char input);
+#line 1 "c:/users/bangonkali/desktop/projects/blacky/mikroc/libmotor.h"
+
+
+void SetSpeed(char speed);
+
+void TurnLeft();
+void TurnRight();
+void Turn(char delay, char speed, char direction);
+void MoveForward (char speed);
+#line 8 "C:/Users/Bangonkali/Desktop/Projects/Blacky/MikroC/Blacky.c"
 void main() {
  ADCON1 |= 0x0F;
  CMCON |= 7;
@@ -46,30 +65,78 @@ void main() {
  LATD = 0;
 
  UART1_Init(9600);
- Delay_ms(100);
 
+ initial_direction = ReadCompass(0);
+
+ Delay_ms(100);
+ MoveForward (7);
  test = 0;
+
+ start = 1;
 
  while(1){
  err = ReadPing(&left, &front, &right);
 
- UART1_Write(left);
- UART1_Write(front);
- UART1_Write(right);
+ transmit_rf(1);
+ transmit_rf(left);
+ transmit_rf(2);
+ transmit_rf(right);
+ transmit_rf(3);
+ transmit_rf(front);
+ transmit_rf(4);
+ current_direction = ReadCompass(1);
+ transmit_rf(5);
+ transmit_rf(start);
+ transmit_rf(6);
 
- UART1_Write(0x0D);
- UART1_Write(0x0A);
+ if (start != 0) {
+ if (front <  25  && right >=  25  && left >=  25 ) {
+ if (right > left) {
+ TurnRight();
+ } else {
+ TurnLeft();
+ }
+ }
 
- ReadCompass(1);
+ if (right <  25  && front <  25  && left >=  25 ) {
+ TurnRight();
+ }
 
- Delay_ms(1000);
+ if (left <  25  && front <  25  && right >=  25 ) {
+ TurnLeft();
+ }
+
+ if (left <  25  && front <  25  && right <  25 ) {
+ MoveForward(0);
+ }
+
+ if (left >  25  && front >  25  && right >  25 ) {
+ if (initial_direction > current_direction) {
+ if (initial_direction - current_direction > 180) {
+ TurnRight();
+ } else {
+ TurnLeft();
+ }
+ } else if (current_direction > initial_direction) {
+ if (current_direction - initial_direction > 180) {
+ TurnLeft();
+ } else {
+ TurnRight();
+ }
+ }
+
+ MoveForward(3);
+ }
+ }
 
  if (test == 0) {
- PORTB = 0xFF;
+ LATB.B0 = 0x01;
  test = 1;
  } else {
  test = 0;
- PORTB = 0x00;
+ LATB.B0 = 0x00;
  }
+
+
  }
 }

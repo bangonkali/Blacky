@@ -1,0 +1,9 @@
+C:\Users\Bangonkali\Downloads\SerialPortListener_270410\SerialPortListener\SerialPortListener\bin\Debug\SerialPortListener.exe
+C:\Users\Bangonkali\Downloads\SerialPortListener_270410\SerialPortListener\SerialPortListener\bin\Debug\SerialPortListener.pdb
+C:\Users\Bangonkali\Downloads\SerialPortListener_270410\SerialPortListener\SerialPortListener\obj\x86\Debug\SerialPortListener.MainForm.resources
+C:\Users\Bangonkali\Downloads\SerialPortListener_270410\SerialPortListener\SerialPortListener\obj\x86\Debug\SerialPortListener.Properties.Resources.resources
+C:\Users\Bangonkali\Downloads\SerialPortListener_270410\SerialPortListener\SerialPortListener\obj\x86\Debug\SerialPortListener.csproj.GenerateResource.Cache
+C:\Users\Bangonkali\Downloads\SerialPortListener_270410\SerialPortListener\SerialPortListener\obj\x86\Debug\SerialPortListener.exe
+C:\Users\Bangonkali\Downloads\SerialPortListener_270410\SerialPortListener\SerialPortListener\obj\x86\Debug\SerialPortListener.pdb
+C:\Users\Bangonkali\Downloads\SerialPortListener_270410\SerialPortListener\SerialPortListener\bin\Debug\AGauge.dll
+C:\Users\Bangonkali\Downloads\SerialPortListener_270410\SerialPortListener\SerialPortListener\bin\Debug\AGauge.pdb

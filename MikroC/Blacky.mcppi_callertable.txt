@@ -2,65 +2,6 @@ main
 	main_init
 		___init_core___
 	UART1_Init
-	ReadPing
-		ReadPing_L
-			Int2Double
-				NRM3232
-					RES032
-					SETFUN32
-					FIXSIGN32
-			Count_Distance
-				Compare_Double
-				Div_32x32_FP
-					SETFDZ32
-					RES032
-					SETFOV32
-					SETFUN32
-				Mul_32x32_FP
-					RES032
-					SETFOV32
-					SETFUN32
-				Double2Int
-					SETIOV3224
-		ReadPing_R
-			Int2Double
-				NRM3232
-					RES032
-					SETFUN32
-					FIXSIGN32
-			Count_Distance
-				Compare_Double
-				Div_32x32_FP
-					SETFDZ32
-					RES032
-					SETFOV32
-					SETFUN32
-				Mul_32x32_FP
-					RES032
-					SETFOV32
-					SETFUN32
-				Double2Int
-					SETIOV3224
-		ReadPing_F
-			Int2Double
-				NRM3232
-					RES032
-					SETFUN32
-					FIXSIGN32
-			Count_Distance
-				Compare_Double
-				Div_32x32_FP
-					SETFDZ32
-					RES032
-					SETFOV32
-					SETFUN32
-				Mul_32x32_FP
-					RES032
-					SETFOV32
-					SETFUN32
-				Double2Int
-					SETIOV3224
-	UART1_Write
 	ReadCompass
 		Soft_UART_Init
 			Get_Fosc_kHz
@@ -71,6 +12,15 @@ main
 		Soft_UART_Read
 			Delay_Cyc
 		FindDataFromBuffer
+			transmit_rf
+				Soft_UART_Init
+					Get_Fosc_kHz
+					Mul_32x32_U
+					Div_32x32_S
+						SDIV3232L
+						COMFREM
+				Soft_UART_Write
+					Delay_Cyc
 			atoi
 				isdigit
 				Mul_16x16_U
@@ -91,4 +41,87 @@ main
 				SETFUN32
 			Double2Byte
 				SETIOV3224
-		UART1_Write
+		transmit_rf
+			Soft_UART_Init
+				Get_Fosc_kHz
+				Mul_32x32_U
+				Div_32x32_S
+					SDIV3232L
+					COMFREM
+			Soft_UART_Write
+				Delay_Cyc
+	MoveForward
+	ReadPing
+		ReadPing_R
+			Longint2Double
+				NRM4032
+					SETFUN32
+					FIXSIGN32
+					SETFOV32
+					RES032
+			Count_Distance
+				Compare_Double
+				Div_32x32_FP
+					SETFDZ32
+					RES032
+					SETFOV32
+					SETFUN32
+				Mul_32x32_FP
+					RES032
+					SETFOV32
+					SETFUN32
+				Double2Int
+					SETIOV3224
+		ReadPing_L
+			Longint2Double
+				NRM4032
+					SETFUN32
+					FIXSIGN32
+					SETFOV32
+					RES032
+			Count_Distance
+				Compare_Double
+				Div_32x32_FP
+					SETFDZ32
+					RES032
+					SETFOV32
+					SETFUN32
+				Mul_32x32_FP
+					RES032
+					SETFOV32
+					SETFUN32
+				Double2Int
+					SETIOV3224
+		ReadPing_F
+			Longint2Double
+				NRM4032
+					SETFUN32
+					FIXSIGN32
+					SETFOV32
+					RES032
+			Count_Distance
+				Compare_Double
+				Div_32x32_FP
+					SETFDZ32
+					RES032
+					SETFOV32
+					SETFUN32
+				Mul_32x32_FP
+					RES032
+					SETFOV32
+					SETFUN32
+				Double2Int
+					SETIOV3224
+	transmit_rf
+		Soft_UART_Init
+			Get_Fosc_kHz
+			Mul_32x32_U
+			Div_32x32_S
+				SDIV3232L
+				COMFREM
+		Soft_UART_Write
+			Delay_Cyc
+	TurnRight
+		Turn
+	TurnLeft
+		Turn
