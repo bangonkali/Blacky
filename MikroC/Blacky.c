@@ -16,9 +16,9 @@ void main() {
     LATD = 0;
 
     UART1_Init(9600);
-	
-	initial_direction = ReadCompass(0);
-	
+    
+    initial_direction = ReadCompass(0);
+    
     Delay_ms(100);
     MoveForward (7);
     test = 0;
@@ -42,11 +42,11 @@ void main() {
         
         if (start != 0) {
             if (front < MIN_SAFE_DISTANCE && right >= MIN_SAFE_DISTANCE && left >= MIN_SAFE_DISTANCE) {
-				if (right > left) {
-					TurnRight();
-				}  else {
-					TurnLeft();
-				}
+                if (right > left) {
+                    TurnRight();
+                }  else {
+                    TurnLeft();
+                }
             }
             
             if (right < MIN_SAFE_DISTANCE && front < MIN_SAFE_DISTANCE && left >= MIN_SAFE_DISTANCE) {
@@ -62,21 +62,21 @@ void main() {
             }
 
             if (left > MIN_SAFE_DISTANCE && front > MIN_SAFE_DISTANCE && right > MIN_SAFE_DISTANCE) {
-				if (initial_direction > current_direction) {
-					if (initial_direction - current_direction > 180) {
-						TurnRight();
-					} else {
-						TurnLeft();
-					}
-				} else if (current_direction > initial_direction) {
-					if (current_direction - initial_direction > 180) {
-						TurnLeft();
-					} else {
-						TurnRight();
-					}
-				}
-				
-				MoveForward(3);
+                if (initial_direction > current_direction) {
+                    if (initial_direction - current_direction > 180) {
+                        TurnRight();
+                    } else {
+                        TurnLeft();
+                    }
+                } else if (current_direction > initial_direction) {
+                    if (current_direction - initial_direction > 180) {
+                        TurnLeft();
+                    } else {
+                        TurnRight();
+                    }
+                }
+                
+                MoveForward(DEFAULT_SPEED);
             }
         }
         

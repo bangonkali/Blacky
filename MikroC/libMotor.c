@@ -6,11 +6,11 @@ void SetSpeed(char speed) {
 }
 
 void TurnLeft() {
-    Turn (200, 3, 0);
+    Turn (200, DEFAULT_SPEED, 0);
 }
 
 void TurnRight() {
-    Turn (200, 3, 1);
+    Turn (200, DEFAULT_SPEED, 1);
 }
 
 void Turn(char delay, char speed, char direction) {

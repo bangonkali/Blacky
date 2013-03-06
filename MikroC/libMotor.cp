@@ -2,6 +2,9 @@
 #line 1 "c:/users/bangonkali/desktop/projects/blacky/mikroc/libmotor.h"
 
 
+
+
+
 void SetSpeed(char speed);
 
 void TurnLeft();
@@ -15,11 +18,11 @@ void SetSpeed(char speed) {
 }
 
 void TurnLeft() {
- Turn (200, 3, 0);
+ Turn (200,  0xF , 0);
 }
 
 void TurnRight() {
- Turn (200, 3, 1);
+ Turn (200,  0xF , 1);
 }
 
 void Turn(char delay, char speed, char direction) {

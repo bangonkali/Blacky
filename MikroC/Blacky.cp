@@ -47,6 +47,9 @@ int transmit_rf(char input);
 #line 1 "c:/users/bangonkali/desktop/projects/blacky/mikroc/libmotor.h"
 
 
+
+
+
 void SetSpeed(char speed);
 
 void TurnLeft();
@@ -125,7 +128,7 @@ void main() {
  }
  }
 
- MoveForward(3);
+ MoveForward( 0xF );
  }
  }
 

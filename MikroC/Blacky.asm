@@ -448,8 +448,8 @@ L_main27:
 ;Blacky.c,77 :: 		}
 L_main25:
 L_main24:
-;Blacky.c,79 :: 		MoveForward(3);
-	MOVLW       3
+;Blacky.c,79 :: 		MoveForward(DEFAULT_SPEED);
+	MOVLW       15
 	MOVWF       FARG_MoveForward_speed+0 
 	CALL        _MoveForward+0, 0
 ;Blacky.c,80 :: 		}

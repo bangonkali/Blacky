@@ -15,10 +15,10 @@ L_end_SetSpeed:
 _TurnLeft:
 
 ;libMotor.c,8 :: 		void TurnLeft() {
-;libMotor.c,9 :: 		Turn (200, 3, 0);
+;libMotor.c,9 :: 		Turn (200, DEFAULT_SPEED, 0);
 	MOVLW       200
 	MOVWF       FARG_Turn_delay+0 
-	MOVLW       3
+	MOVLW       15
 	MOVWF       FARG_Turn_speed+0 
 	CLRF        FARG_Turn_direction+0 
 	CALL        _Turn+0, 0
@@ -30,10 +30,10 @@ L_end_TurnLeft:
 _TurnRight:
 
 ;libMotor.c,12 :: 		void TurnRight() {
-;libMotor.c,13 :: 		Turn (200, 3, 1);
+;libMotor.c,13 :: 		Turn (200, DEFAULT_SPEED, 1);
 	MOVLW       200
 	MOVWF       FARG_Turn_delay+0 
-	MOVLW       3
+	MOVLW       15
 	MOVWF       FARG_Turn_speed+0 
 	MOVLW       1
 	MOVWF       FARG_Turn_direction+0 

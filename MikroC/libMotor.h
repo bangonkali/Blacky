@@ -1,5 +1,8 @@
 #ifndef LIBMOTOR_H
 #define LIBMOTOR_H
+
+#define DEFAULT_SPEED 0xF
+
 void SetSpeed(char speed);
 
 void TurnLeft();
