@@ -13,6 +13,9 @@ namespace SerialPortListener
 {
     public partial class MainForm : Form
     {
+		bool something_new = false;
+
+		byte returnvalue = 0xFF;
         SerialPortManager _spManager;
         public MainForm()
         {
@@ -21,6 +24,22 @@ namespace SerialPortListener
             UserInitialization();
         }
 
+		public class RunMotorConfiguration
+		{
+			public int Value;
+			public string Name;
+
+			public RunMotorConfiguration(int value, string name)
+			{
+				this.Value = value;
+				this.Name = name;
+			}
+
+			public override string ToString()
+			{
+				return this.Name;
+			}
+		}
       
         private void UserInitialization()
         {
@@ -36,7 +55,13 @@ namespace SerialPortListener
             _spManager.NewSerialDataRecieved += new EventHandler<SerialDataEventArgs>(_spManager_NewSerialDataRecieved);
             this.FormClosing += new FormClosingEventHandler(MainForm_FormClosing);
 
-			portNameComboBox.SelectedIndex = portNameComboBox.Items.Count - 1;
+
+			cboType.Items.Add(new RunMotorConfiguration(1, "Fast - Sparce Compass"));
+			cboType.Items.Add(new RunMotorConfiguration(2, "Fast - Constant Compass"));
+			cboType.Items.Add(new RunMotorConfiguration(3, "Slow - Sparce Compass"));
+			cboType.Items.Add(new RunMotorConfiguration(4, "Slow - Constant Compass"));
+			cboType.Items.Add(new RunMotorConfiguration(5, "Fast - No Compass"));
+			cboType.Items.Add(new RunMotorConfiguration(6, "Slow - No Compass"));
         }
 
         
@@ -56,23 +81,36 @@ namespace SerialPortListener
                 return;
             }
 
+			something_new = true;
             int maxTextLength = 1000; // maximum text length in text box
             if (tbData.TextLength > maxTextLength)
                 tbData.Text = tbData.Text.Remove(0, tbData.TextLength - maxTextLength);
 
             // This application is connected to a GPS sending ASCCI characters, so data is converted to text
             string str = Encoding.ASCII.GetString(e.Data);
-			string strfinal = "";
 
 			byte[] ascii = Encoding.ASCII.GetBytes(str);
 
 			foreach (byte b in ascii)
 			{
 				j.Add(b);
-				tbData.AppendText(b.ToString() + " ");
-				if (FindDataFromBuffer(j, 28, 13) == 1)
+
+				if (j.Count >= 3)
 				{
-					j.Clear();
+					if (j.ToArray<Byte>()[j.Count - 1] == 0x14 &&
+						j.ToArray<Byte>()[j.Count - 1] == 0x13 &&
+						j.ToArray<Byte>()[j.Count - 1] == 0x12)
+					{
+						//byte[] k = { returnvalue };
+						//_spManager.Write(k,0,1);
+						//System.Diagnostics.Debug.WriteLine("Writing " + (int)returnvalue);
+						//_spManager.StartListening();
+					}
+				}
+
+				tbData.AppendText(b.ToString() + " ");
+				if (FindDataFromBuffer(j.ToList<Byte>(), 42, 19) == 1)
+				{
 				}
 			}
         }
@@ -86,13 +124,8 @@ namespace SerialPortListener
         // Handles the "Stop Listening"-buttom click event
         private void btnStop_Click(object sender, EventArgs e)
         {
-            _spManager.StopListening();
+			_spManager.StopListening();
         }
-
-		private void MainForm_Load(object sender, EventArgs e)
-		{
-
-		}
 
 
 		int FindDataFromBuffer(List<byte> buffer, short buffer_length, short data_length)
@@ -100,32 +133,42 @@ namespace SerialPortListener
 			int i=0;
 			tBufferLength.Text = j.Count.ToString();
 
+			while (j.Count > buffer_length*2)
+			{
+				j.Clear();
+				//j.RemoveAt(0);
+			}
+
+
+
 			if (j.Count > buffer_length)
 			{
 				for (i = 0; i < buffer_length - data_length; i++)
 				{
 					if (
-						buffer[0 + i] == 1 &&
-						buffer[2 + i] == 2 &&
-						buffer[4 + i] == 3 &&
-						buffer[6 + i] == 4 &&
-						buffer[10 + i] == 5 &&
-						buffer[12 + i] == 6
+						j[0 + i] == 1 &&
+						j[2 + i] == 2 &&
+						j[4 + i] == 3 &&
+						j[6 + i] == 4 &&
+						j[10 + i] == 5 &&
+						j[12 + i] == 6
 						)
 					{
 						tbData.Clear();
-						tbData.AppendText("Left Sensor: " + buffer[1 + i] + "\r\n");
-						tbData.AppendText("Right Sensor: " + buffer[3 + i] + "\r\n");
-						tbData.AppendText("Front Sensor: " + buffer[5 + i] + "\r\n");
+						tbData.AppendText("Left Sensor: " + j[1 + i] + "\r\n");
+						tbData.AppendText("Right Sensor: " + j[3 + i] + "\r\n");
+						tbData.AppendText("Front Sensor: " + j[5 + i] + "\r\n");
 
-						string  compass_reading = System.Text.Encoding.ASCII.GetString(buffer.ToArray<byte>(), 7+i,3);
+						string  compass_reading = System.Text.Encoding.ASCII.GetString(j.ToArray<byte>(), 7+i,3);
+						string compass_reading_i = System.Text.Encoding.ASCII.GetString(j.ToArray<byte>(), 13 + i, 3);
 
 						tbData.AppendText("Compass: " + compass_reading + "\r\n");
-						tbData.AppendText("Start: " + buffer[11 + i] + "\r\n");
+						tbData.AppendText("Compass Initial: " + compass_reading_i + "\r\n");
+						tbData.AppendText("Start: " + j[11 + i] + "\r\n");
 
-						tLeft.Text = ((int)buffer[1 + i]).ToString();
-						tRight.Text = ((int)buffer[3 + i]).ToString();
-						tFront.Text = ((int)buffer[5 + i]).ToString();
+						tLeft.Text = ((int)j[1 + i]).ToString();
+						tRight.Text = ((int)j[3 + i]).ToString();
+						tFront.Text = ((int)j[5 + i]).ToString();
 
 						int compass_reading_int = 0;
 						if (int.TryParse(compass_reading, out compass_reading_int))
@@ -135,13 +178,35 @@ namespace SerialPortListener
 						}
 						else
 						{
+							compass.Value = compass_reading_int;
 							compass.NeedleColor1 = AGaugeNeedleColor.Red;
 						}
 
-						
+
+
+						int compass_initial_int = 0;
+						if (int.TryParse(compass_reading_i, out compass_initial_int))
+						{
+							compass_initial.Value = compass_initial_int;
+							compass_initial.NeedleColor1 = AGaugeNeedleColor.Gray;
+						}
+						else
+						{
+							compass_initial.Value = compass_initial_int;
+							compass_initial.NeedleColor1 = AGaugeNeedleColor.Red;
+						}
+						System.Diagnostics.Debug.WriteLine("Initial Dircetion: " + compass_initial_int.ToString());
+
 						tbData.ScrollToCaret();
 
-						buffer.Clear();
+						aGauge1.Value = (int)j[16 + i];
+						aGauge2.Value = (int)j[17 + i];
+
+
+						System.Diagnostics.Debug.WriteLine("1: " + (int)j[16 + i] + "; 2: " + (int)j[17 + i]);
+
+						j.Clear();
+						j.Clear();
 
 						return 1;
 					}
@@ -150,7 +215,7 @@ namespace SerialPortListener
 
 				if (j.Count > buffer_length)
 				{
-					buffer.Clear();
+					j.Clear();
 					return 1;
 				}
 			}
@@ -158,9 +223,33 @@ namespace SerialPortListener
 			return 0;
 		}
 
-		private void tFront_TextChanged(object sender, EventArgs e)
+		private void btnMotor_Click(object sender, EventArgs e)
+		{
+			ForceSend();
+		}
+
+		private void ForceSend()
+		{
+			if (cboType.SelectedItem != null)
+			{
+				RunMotorConfiguration config = (RunMotorConfiguration)cboType.SelectedItem;
+
+				returnvalue = (byte)config.Value;
+				byte[] k = { returnvalue };
+				_spManager.Write(k, 0, 1);
+				System.Diagnostics.Debug.WriteLine("Writing " + (uint)returnvalue);
+				_spManager.StartListening();
+			}
+		}
+
+		private void MainForm_Load(object sender, EventArgs e)
 		{
 
+		}
+
+		private void MainForm_Shown(object sender, EventArgs e)
+		{
+			portNameComboBox.SelectedIndex = portNameComboBox.Items.Count - 1;
 		}
 
     }

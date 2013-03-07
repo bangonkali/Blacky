@@ -1,6 +1,6 @@
-char Skew(int input, int maximum, int scaled_max) {
-    if (input > maximum)
-        input = maximum;
+unsigned int Skew(double cnt, double max, double scale) {
+    if (cnt > max)
+        cnt = max;
 
-    return (char)((double)scaled_max*((double)input/(double)maximum));
+    return (unsigned int)(scale*(cnt/max));
 }

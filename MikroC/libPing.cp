@@ -13,13 +13,13 @@ extern sfr sbit Trigger_L;
 extern sfr sbit Trigger_F;
 extern sfr sbit Trigger_R;
 
-int ReadPing_L();
-int ReadPing_F();
-int ReadPing_R();
+unsigned int ReadPing_L();
+unsigned int ReadPing_F();
+unsigned int ReadPing_R();
 
-int Count_Distance(double cnt, double max, double scale);
+unsigned int Count_Distance(double cnt, double max, double scale);
 #line 3 "C:/Users/Bangonkali/Desktop/Projects/Blacky/MikroC/libPing.c"
-int ReadPing_L() {
+unsigned int ReadPing_L() {
  long count_distance = 0;
  TRISD = 0x6A;
 
@@ -40,7 +40,7 @@ int ReadPing_L() {
  return Count_Distance((double)count_distance, (double) 2000 , (double) 255 );
 }
 
-int ReadPing_R() {
+unsigned int ReadPing_R() {
  long count_distance = 0;
  TRISD = 0x6A;
 
@@ -61,7 +61,7 @@ int ReadPing_R() {
  return Count_Distance((double)count_distance, (double) 2000 , (double) 255 );
 }
 
-int ReadPing_F() {
+unsigned int ReadPing_F() {
  long count_distance = 0;
  TRISD = 0x6A;
 
@@ -82,9 +82,9 @@ int ReadPing_F() {
  return Count_Distance((double)count_distance, (double) 2000 , (double) 255 );
 }
 
-int Count_Distance(double cnt, double max, double scale) {
+unsigned int Count_Distance(double cnt, double max, double scale) {
  if (cnt > max)
  cnt = max;
 
- return (int)(scale*(cnt/max));
+ return (unsigned int)(scale*(cnt/max));
 }

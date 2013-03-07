@@ -2,54 +2,6 @@ main
 	main_init
 		___init_core___
 	UART1_Init
-	ReadCompass
-		Soft_UART_Init
-			Get_Fosc_kHz
-			Mul_32x32_U
-			Div_32x32_S
-				SDIV3232L
-				COMFREM
-		Soft_UART_Read
-			Delay_Cyc
-		FindDataFromBuffer
-			transmit_rf
-				Soft_UART_Init
-					Get_Fosc_kHz
-					Mul_32x32_U
-					Div_32x32_S
-						SDIV3232L
-						COMFREM
-				Soft_UART_Write
-					Delay_Cyc
-			atoi
-				isdigit
-				Mul_16x16_U
-		Skew
-			Int2Double
-				NRM3232
-					RES032
-					SETFUN32
-					FIXSIGN32
-			Div_32x32_FP
-				SETFDZ32
-				RES032
-				SETFOV32
-				SETFUN32
-			Mul_32x32_FP
-				RES032
-				SETFOV32
-				SETFUN32
-			Double2Byte
-				SETIOV3224
-		transmit_rf
-			Soft_UART_Init
-				Get_Fosc_kHz
-				Mul_32x32_U
-				Div_32x32_S
-					SDIV3232L
-					COMFREM
-			Soft_UART_Write
-				Delay_Cyc
 	MoveForward
 	ReadPing
 		ReadPing_R
@@ -70,7 +22,7 @@ main
 					RES032
 					SETFOV32
 					SETFUN32
-				Double2Int
+				Double2Word
 					SETIOV3224
 		ReadPing_L
 			Longint2Double
@@ -90,7 +42,7 @@ main
 					RES032
 					SETFOV32
 					SETFUN32
-				Double2Int
+				Double2Word
 					SETIOV3224
 		ReadPing_F
 			Longint2Double
@@ -110,7 +62,7 @@ main
 					RES032
 					SETFOV32
 					SETFUN32
-				Double2Int
+				Double2Word
 					SETIOV3224
 	transmit_rf
 		Soft_UART_Init
@@ -121,7 +73,65 @@ main
 				COMFREM
 		Soft_UART_Write
 			Delay_Cyc
+	ReadCompass
+		Soft_UART_Init
+			Get_Fosc_kHz
+			Mul_32x32_U
+			Div_32x32_S
+				SDIV3232L
+				COMFREM
+		Soft_UART_Read
+			Delay_Cyc
+		FindDataFromBuffer
+			transmit_rf
+				Soft_UART_Init
+					Get_Fosc_kHz
+					Mul_32x32_U
+					Div_32x32_S
+						SDIV3232L
+						COMFREM
+				Soft_UART_Write
+					Delay_Cyc
+			Mul_16x16_U
+		Word2Double
+			NRM3232
+				RES032
+				SETFUN32
+				FIXSIGN32
+		Skew
+			Compare_Double
+			Div_32x32_FP
+				SETFDZ32
+				RES032
+				SETFOV32
+				SETFUN32
+			Mul_32x32_FP
+				RES032
+				SETFOV32
+				SETFUN32
+			Double2Word
+				SETIOV3224
+		transmit_rf
+			Soft_UART_Init
+				Get_Fosc_kHz
+				Mul_32x32_U
+				Div_32x32_S
+					SDIV3232L
+					COMFREM
+			Soft_UART_Write
+				Delay_Cyc
+	read_rf
+		Soft_UART_Init
+			Get_Fosc_kHz
+			Mul_32x32_U
+			Div_32x32_S
+				SDIV3232L
+				COMFREM
+		Soft_UART_Read
+			Delay_Cyc
 	TurnRight
 		Turn
+	MoveBackward
 	TurnLeft
 		Turn
+	abs

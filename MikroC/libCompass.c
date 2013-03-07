@@ -2,11 +2,11 @@
 #include "libCompass.h"
 #include "libRF.h"
 
-int ReadCompass(char send_serial) {
-    char buffer[12] = {0};
-    char soft_uart_error;
-    char skewed_output_integer;
-    int out_buffer_integer;
+unsigned char ReadCompass(unsigned char send_serial, unsigned char * read_data) {
+    unsigned char buffer[12] = {0};
+    unsigned char soft_uart_error;
+    unsigned char skewed_output_integer;
+    unsigned int out_buffer_integer;
     
     TRISE = 0x09;
     LATE = 0b1001;
@@ -36,20 +36,10 @@ int ReadCompass(char send_serial) {
         // pangitaon kung aha dadto ang actual data. 2x ang sample
         // para ma sure2 jud na naay data makuha sa sulod.
         Delay_ms(20);
-        out_buffer_integer = FindDataFromBuffer(buffer, 12, 7);
+        out_buffer_integer = FindDataFromBuffer(buffer, 12, 7, read_data, send_serial);
         Delay_ms(20);
         
-        // for debugging, if enabled isend sa UART1_Write.
-        if (send_serial == 1) {
-            // skewed_output_integer = 0;
-            skewed_output_integer = Skew(out_buffer_integer, 360, 255);
-            // UART1_Write(skewed_output_integer);
-            // UART1_Write(0x0D);
-            // UART1_Write(0x0A);
-            
-            // send to wireless transmitter
-            // transmit_rf(skewed_output_integer);
-        }
+        return Skew(out_buffer_integer, 359, 124);
     } else {
         if (send_serial == 1) {
             transmit_rf(0xFF);
@@ -60,9 +50,8 @@ int ReadCompass(char send_serial) {
     return 0;
 }
 
-int FindDataFromBuffer(char *buffer, char buffer_length, char data_length) {
-    int i=0;
-    char j[5] = {0};
+unsigned int FindDataFromBuffer(unsigned char *buffer, unsigned char buffer_length, unsigned char data_length, unsigned char * read_data, unsigned char send_serial) {
+    unsigned int i=0;
     
     for (i; i<buffer_length-data_length; i++) {
         if (
@@ -72,17 +61,24 @@ int FindDataFromBuffer(char *buffer, char buffer_length, char data_length) {
             buffer[6+i] == 2
             ) 
         {
-            j[0] = buffer[2+i];
-            j[1] = buffer[3+i];
-            j[2] = buffer[4+i];
-            j[3] = '\0';
+            read_data[0] = buffer[2+i]; 
+            read_data[1] = buffer[3+i];
+            read_data[2] = buffer[4+i];
             
-            transmit_rf(j[0]);
-            transmit_rf(j[1]);
-            transmit_rf(j[2]);
+            if (send_serial) {
+                transmit_rf(buffer[2+i]);
+                transmit_rf(buffer[3+i]);
+                transmit_rf(buffer[4+i]);
+            }
             
-            return atoi(j);
-        }
+            return (
+                ((buffer[2+i]-48) * 100) +
+                ((buffer[3+i]-48) * 10) +
+                ((buffer[4+i]-48) * 1)
+            );
+        }   
             
     }
+    
+    return 0;
 }

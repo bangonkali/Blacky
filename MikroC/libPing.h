@@ -11,10 +11,10 @@ extern sfr sbit Trigger_L; // Trigger bit for the left sensor
 extern sfr sbit Trigger_F; // Trigger bit for the front sensor
 extern sfr sbit Trigger_R; // Trigger bit for the right sensor
 
-int ReadPing_L();
-int ReadPing_F();
-int ReadPing_R();
+unsigned int ReadPing_L();
+unsigned int ReadPing_F();
+unsigned int ReadPing_R();
 
-int Count_Distance(double cnt, double max, double scale);
+unsigned int Count_Distance(double cnt, double max, double scale);
 
 #endif

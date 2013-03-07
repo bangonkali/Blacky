@@ -3,29 +3,32 @@
 
 
 
-
-
-void SetSpeed(char speed);
+void SetSpeed(unsigned char speed);
 
 void TurnLeft();
 void TurnRight();
-void Turn(char delay, char speed, char direction);
-void MoveForward (char speed);
+void Turn(unsigned char delay, unsigned char speed, unsigned char direction);
+void MoveForward (unsigned char speed);
+void MoveBackward (unsigned char speed);
+
+
+extern unsigned char speed_veryfast;
+extern unsigned char speed_veryslow;
 #line 3 "C:/Users/Bangonkali/Desktop/Projects/Blacky/MikroC/libMotor.c"
-void SetSpeed(char speed) {
+void SetSpeed(unsigned char speed) {
  TRISA = 0x00;
  LATA = speed;
 }
 
 void TurnLeft() {
- Turn (200,  0xF , 0);
+ Turn (200, speed_veryslow, 0);
 }
 
 void TurnRight() {
- Turn (200,  0xF , 1);
+ Turn (200, speed_veryslow, 1);
 }
 
-void Turn(char delay, char speed, char direction) {
+void Turn(unsigned char delay, unsigned char speed, unsigned char direction) {
  TRISB = 0x00;
  TRISA = 0x00;
 
@@ -34,21 +37,19 @@ void Turn(char delay, char speed, char direction) {
  LATB.B1 = 1;
  LATB.B2 = 0;
 
- LATB.B3 = 1;
+ LATB.B3 = 0;
  LATB.B4 = 0;
  } else {
 
  LATB.B1 = 0;
- LATB.B2 = 1;
+ LATB.B2 = 0;
 
  LATB.B3 = 0;
  LATB.B4 = 1;
  }
-
- Delay_ms(10);
 }
 
-void MoveForward (char speed) {
+void MoveForward (unsigned char speed) {
  TRISB = 0x00;
  TRISA = 0x00;
 
@@ -59,4 +60,17 @@ void MoveForward (char speed) {
 
  LATB.B3 = 0;
  LATB.B4 = 1;
+}
+
+void MoveBackward (unsigned char speed) {
+ TRISB = 0x00;
+ TRISA = 0x00;
+
+ LATA = speed;
+
+ LATB.B1 = 0;
+ LATB.B2 = 1;
+
+ LATB.B3 = 1;
+ LATB.B4 = 0;
 }

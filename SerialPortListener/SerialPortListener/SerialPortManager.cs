@@ -37,7 +37,8 @@ namespace SerialPortListener.Serial
         private SerialPort _serialPort;
         private SerialSettings _currentSerialSettings = new SerialSettings();
         private string _latestRecieved = String.Empty;
-        public event EventHandler<SerialDataEventArgs> NewSerialDataRecieved; 
+        public event EventHandler<SerialDataEventArgs> NewSerialDataRecieved;
+		private bool writing = false;
 
         #endregion
 
@@ -58,22 +59,29 @@ namespace SerialPortListener.Serial
         void _currentSerialSettings_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
             // if serial port is changed, a new baud query is issued
-            if (e.PropertyName.Equals("PortName"))
-                UpdateBaudRateCollection();
+			if (e.PropertyName.Equals("PortName"))
+			{
+				UpdateBaudRateCollection();
+			}
+
+			System.Diagnostics.Debug.WriteLine("e.PropertyName: " + e.PropertyName);
         }
 
         
         void _serialPort_DataReceived(object sender, SerialDataReceivedEventArgs e)
         {
-            int dataLength = _serialPort.BytesToRead;
-            byte[] data = new byte[dataLength];
-            int nbrDataRead = _serialPort.Read(data, 0, dataLength);
-            if (nbrDataRead == 0)
-                return;
-            
-            // Send data to whom ever interested
-            if (NewSerialDataRecieved != null)
-                NewSerialDataRecieved(this, new SerialDataEventArgs(data));
+			if (_serialPort.IsOpen)
+			{
+				int dataLength = _serialPort.BytesToRead;
+				byte[] data = new byte[dataLength];
+				int nbrDataRead = _serialPort.Read(data, 0, dataLength);
+				if (nbrDataRead == 0)
+					return;
+
+				// Send data to whom ever interested
+				if (NewSerialDataRecieved != null)
+					NewSerialDataRecieved(this, new SerialDataEventArgs(data));
+			}
         }
 
         #endregion
@@ -85,22 +93,51 @@ namespace SerialPortListener.Serial
         /// </summary>
         public void StartListening()
         {
-            // Closing serial port if it is open
-            if (_serialPort != null && _serialPort.IsOpen)
-                    _serialPort.Close();
+			if (!writing)
+			{
+				// Closing serial port if it is open
+				if (_serialPort != null && _serialPort.IsOpen)
+						_serialPort.Close();
 
-            // Setting serial port settings
-            _serialPort = new SerialPort(
-                _currentSerialSettings.PortName,
-                _currentSerialSettings.BaudRate,
-                _currentSerialSettings.Parity,
-                _currentSerialSettings.DataBits,
-                _currentSerialSettings.StopBits);
+				// Setting serial port settings
+				_serialPort = new SerialPort(
+					_currentSerialSettings.PortName,
+					_currentSerialSettings.BaudRate,
+					_currentSerialSettings.Parity,
+					_currentSerialSettings.DataBits,
+					_currentSerialSettings.StopBits);
 
-            // Subscribe to event and open serial port for data
-            _serialPort.DataReceived += new SerialDataReceivedEventHandler(_serialPort_DataReceived);
-            _serialPort.Open();
+				// Subscribe to event and open serial port for data
+				_serialPort.DataReceived += new SerialDataReceivedEventHandler(_serialPort_DataReceived);
+
+				try
+				{
+					if (!_serialPort.IsOpen)
+						_serialPort.Open();
+				} catch {
+					System.Diagnostics.Debug.WriteLine("Error Opening Port.");
+				}
+			}
         }
+
+		public void Write(byte[] data, int offset, int count)
+		{
+			writing = true;
+			// Closing serial port if it is open
+			if (_serialPort != null && _serialPort.IsOpen)
+				_serialPort.Close();
+
+			// Setting serial port settings
+			_serialPort = new SerialPort(
+				_currentSerialSettings.PortName,
+				_currentSerialSettings.BaudRate,
+				_currentSerialSettings.Parity,
+				_currentSerialSettings.DataBits,
+				_currentSerialSettings.StopBits);
+			_serialPort.Open();
+			_serialPort.Write(data, offset, count);
+			writing = false;
+		}
 
         /// <summary>
         /// Closes the serial port

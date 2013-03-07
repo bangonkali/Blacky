@@ -231,6 +231,9 @@ cmip
 cmip_bit
 comfrem
 compare_double
+compass_current
+compass_initial
+configuration
 count_distance
 crc16ee
 crc16ee_bit
@@ -266,6 +269,7 @@ cvrr
 cvrr_bit
 cvrss
 cvrss_bit
+cycle_compass
 d
 d_a
 d_a_bit
@@ -346,6 +350,7 @@ eeip
 eeip_bit
 eepgd
 eepgd_bit
+enable_compass
 endp0
 endp0_bit
 endp1
@@ -724,6 +729,7 @@ main
 main_init
 max
 min
+movebackward
 moveforward
 mul_16x16_s
 mul_16x16_u
@@ -1021,6 +1027,7 @@ re2
 re2_bit
 re3
 re3_bit
+read_rf
 read_write
 read_write_bit
 readcompass
@@ -1082,6 +1089,8 @@ soft_uart_read_error
 soft_uart_write
 spbrg
 spbrgh
+speed_veryfast
+speed_veryslow
 spen
 spen_bit
 spp0
@@ -1244,6 +1253,7 @@ tblptr
 tblptrh
 tblptrl
 tblptru
+temp
 test
 tmr0h
 tmr0ie

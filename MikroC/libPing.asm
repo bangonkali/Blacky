@@ -1,7 +1,7 @@
 
 _ReadPing_L:
 
-;libPing.c,3 :: 		int ReadPing_L() {
+;libPing.c,3 :: 		unsigned int ReadPing_L() {
 ;libPing.c,4 :: 		long count_distance = 0;
 	CLRF        ReadPing_L_count_distance_L0+0 
 	CLRF        ReadPing_L_count_distance_L0+1 
@@ -83,7 +83,7 @@ L_end_ReadPing_L:
 
 _ReadPing_R:
 
-;libPing.c,24 :: 		int ReadPing_R() {
+;libPing.c,24 :: 		unsigned int ReadPing_R() {
 ;libPing.c,25 :: 		long count_distance = 0;
 	CLRF        ReadPing_R_count_distance_L0+0 
 	CLRF        ReadPing_R_count_distance_L0+1 
@@ -165,7 +165,7 @@ L_end_ReadPing_R:
 
 _ReadPing_F:
 
-;libPing.c,45 :: 		int ReadPing_F() {
+;libPing.c,45 :: 		unsigned int ReadPing_F() {
 ;libPing.c,46 :: 		long count_distance = 0;
 	CLRF        ReadPing_F_count_distance_L0+0 
 	CLRF        ReadPing_F_count_distance_L0+1 
@@ -247,7 +247,7 @@ L_end_ReadPing_F:
 
 _Count_Distance:
 
-;libPing.c,66 :: 		int Count_Distance(double cnt, double max, double scale) {
+;libPing.c,66 :: 		unsigned int Count_Distance(double cnt, double max, double scale) {
 ;libPing.c,67 :: 		if (cnt > max)
 	MOVF        FARG_Count_Distance_cnt+0, 0 
 	MOVWF       R4 
@@ -283,7 +283,7 @@ _Count_Distance:
 	MOVF        FARG_Count_Distance_max+3, 0 
 	MOVWF       FARG_Count_Distance_cnt+3 
 L_Count_Distance15:
-;libPing.c,70 :: 		return (int)(scale*(cnt/max));
+;libPing.c,70 :: 		return (unsigned int)(scale*(cnt/max));
 	MOVF        FARG_Count_Distance_max+0, 0 
 	MOVWF       R4 
 	MOVF        FARG_Count_Distance_max+1, 0 
@@ -310,7 +310,7 @@ L_Count_Distance15:
 	MOVF        FARG_Count_Distance_scale+3, 0 
 	MOVWF       R7 
 	CALL        _Mul_32x32_FP+0, 0
-	CALL        _Double2Int+0, 0
+	CALL        _Double2Word+0, 0
 ;libPing.c,71 :: 		}
 L_end_Count_Distance:
 	RETURN      0

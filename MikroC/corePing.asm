@@ -1,7 +1,7 @@
 
 _ReadPing:
 
-;corePing.c,4 :: 		int ReadPing(int *left, int *front, int *right)
+;corePing.c,4 :: 		unsigned int ReadPing(unsigned int *left, unsigned int *front, unsigned int *right)
 ;corePing.c,6 :: 		*right = ReadPing_R();
 	CALL        _ReadPing_R+0, 0
 	MOVFF       FARG_ReadPing_right+0, FSR1

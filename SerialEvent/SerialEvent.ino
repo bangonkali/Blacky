@@ -12,4 +12,8 @@ void loop() {
   }
 }
 
-
+void serialEvent() {
+  while (Serial.available()) {
+    Serial1.write(Serial.read());
+  }
+}

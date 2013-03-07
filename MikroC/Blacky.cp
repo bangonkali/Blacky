@@ -9,14 +9,17 @@ void main_init();
 
 
 
-int ReadCompass(char);
-int FindDataFromBuffer(char *buffer, char buffer_length, char data_length);
+unsigned char ReadCompass(unsigned char send_serial, unsigned char * read_data);
+unsigned int FindDataFromBuffer(unsigned char *buffer, unsigned char buffer_length, unsigned char data_length, unsigned char * read_data, unsigned char send_serial);
 #line 1 "c:/users/bangonkali/desktop/projects/blacky/mikroc/coreping.h"
 
 
 
-int ReadPing(int *left, int *front, int *right) ;
+unsigned int ReadPing(unsigned int *left, unsigned int *front, unsigned int *right) ;
 #line 1 "c:/users/bangonkali/desktop/projects/blacky/mikroc/blacky.h"
+
+
+
 
 
 
@@ -31,31 +34,47 @@ sbit Trigger_F at LATD.B2;
 sbit Echo_R at PORTD.B5;
 sbit Trigger_R at LATD.B4;
 
-int left, right, front, err;
-int test;
+unsigned int left, right, front, err;
+unsigned int test;
 
-int soft_uart_error;
-int soft_uart_read_error;
-int initial_direction;
-int current_direction;
-short start;
+unsigned char soft_uart_error;
+unsigned char soft_uart_read_error;
+
+unsigned char initial_direction;
+unsigned char current_direction;
+
+unsigned char compass_initial[3];
+unsigned char compass_current[3];
+
+
+unsigned char speed_veryfast;
+unsigned char speed_veryslow;
+unsigned char configuration;
+unsigned char start;
+unsigned char temp;
+unsigned char enable_compass;
+unsigned char cycle_compass;
 #line 1 "c:/users/bangonkali/desktop/projects/blacky/mikroc/librf.h"
 
 
 
-int transmit_rf(char input);
+unsigned int transmit_rf(unsigned char input);
+unsigned char read_rf(unsigned char *error);
 #line 1 "c:/users/bangonkali/desktop/projects/blacky/mikroc/libmotor.h"
 
 
 
-
-
-void SetSpeed(char speed);
+void SetSpeed(unsigned char speed);
 
 void TurnLeft();
 void TurnRight();
-void Turn(char delay, char speed, char direction);
-void MoveForward (char speed);
+void Turn(unsigned char delay, unsigned char speed, unsigned char direction);
+void MoveForward (unsigned char speed);
+void MoveBackward (unsigned char speed);
+
+
+extern unsigned char speed_veryfast;
+extern unsigned char speed_veryslow;
 #line 8 "C:/Users/Bangonkali/Desktop/Projects/Blacky/MikroC/Blacky.c"
 void main() {
  ADCON1 |= 0x0F;
@@ -69,13 +88,13 @@ void main() {
 
  UART1_Init(9600);
 
- initial_direction = ReadCompass(0);
-
  Delay_ms(100);
- MoveForward (7);
- test = 0;
 
- start = 1;
+
+ MoveForward (0);
+ test = 0;
+ cycle_compass = 0;
+ start = 0;
 
  while(1){
  err = ReadPing(&left, &front, &right);
@@ -87,48 +106,130 @@ void main() {
  transmit_rf(3);
  transmit_rf(front);
  transmit_rf(4);
- current_direction = ReadCompass(1);
+
+ if (enable_compass > 0) {
+ if (enable_compass == 1) {
+ current_direction = ReadCompass(1, compass_current);
+ } else if (enable_compass == 2) {
+ if (cycle_compass >  6 ) {
+ current_direction = ReadCompass(1, compass_current);
+ cycle_compass = 0;
+ }
+ cycle_compass++;
+ }
+ } else {
+ transmit_rf(compass_initial[0]);
+ transmit_rf(compass_initial[1]);
+ transmit_rf(compass_initial[2]);
+ }
+
  transmit_rf(5);
  transmit_rf(start);
  transmit_rf(6);
 
- if (start != 0) {
+ if (start > 0) {
+ transmit_rf(compass_initial[0]);
+ transmit_rf(compass_initial[1]);
+ transmit_rf(compass_initial[2]);
+ } else {
+ transmit_rf(compass_current[0]);
+ transmit_rf(compass_current[1]);
+ transmit_rf(compass_current[2]);
+ }
+
+ transmit_rf(current_direction);
+ transmit_rf(initial_direction);
+
+ if (start == 0) {
+ configuration = read_rf(&temp);
+ if (configuration > 0) {
+ start = 1;
+ initial_direction = ReadCompass(0, compass_initial);
+ }
+ if (configuration == 1) {
+ speed_veryfast = 7;
+ speed_veryslow = 3;
+ enable_compass = 2;
+ } else if (configuration == 2) {
+ speed_veryfast = 7;
+ speed_veryslow = 3;
+ enable_compass = 1;
+ } else if (configuration == 3) {
+ speed_veryfast = 5;
+ speed_veryslow = 2;
+ enable_compass = 2;
+ } else if (configuration == 4) {
+ speed_veryfast = 5;
+ speed_veryslow = 2;
+ enable_compass = 1;
+ } else if (configuration == 5) {
+ speed_veryfast = 7;
+ speed_veryslow = 3;
+ enable_compass = 0;
+ } else if (configuration == 6) {
+ speed_veryfast = 5;
+ speed_veryslow = 2;
+ enable_compass = 0;
+ } else {
+ speed_veryfast = 0;
+ speed_veryslow = 0;
+ enable_compass = 0;
+ }
+ }
+
+ if (start > 0) {
  if (front <  25  && right >=  25  && left >=  25 ) {
  if (right > left) {
+ if(cycle_compass !=  6 ) {
  TurnRight();
  } else {
+ MoveBackward(speed_veryfast);
+ Delay_ms(500);
+ }
+ } else {
+ if(cycle_compass !=  6 ) {
  TurnLeft();
+ } else {
+ MoveBackward(speed_veryfast);
+ Delay_ms(500);
  }
  }
-
- if (right <  25  && front <  25  && left >=  25 ) {
+ } else if (right <  25  && front <  25  && left >=  25 ) {
+ if(cycle_compass !=  6 ) {
+ TurnRight();
+ } else {
+ MoveBackward(speed_veryfast);
+ Delay_ms(500);
+ }
+ } else if (left <  25  && front <  25  && right >=  25 ) {
+ if(cycle_compass !=  6 ) {
+ TurnLeft();
+ } else {
+ MoveBackward(speed_veryfast);
+ Delay_ms(500);
+ }
+ } else if (left <  25  && front <  25  && right <  25 ) {
+ MoveBackward(speed_veryfast);
+ } else if (front >  25  && left >  25  && right >  25 ) {
+ if (initial_direction > current_direction && abs(initial_direction - current_direction) > 3) {
+ if(cycle_compass !=  6 ) {
  TurnRight();
  }
-
- if (left <  25  && front <  25  && right >=  25 ) {
+ } else if (current_direction > initial_direction && abs(initial_direction - current_direction) > 3) {
+ if(cycle_compass !=  6 ) {
  TurnLeft();
  }
-
- if (left <  25  && front <  25  && right <  25 ) {
+ } else {
+ if (cycle_compass ==  6 ) {
  MoveForward(0);
- }
-
- if (left >  25  && front >  25  && right >  25 ) {
- if (initial_direction > current_direction) {
- if (initial_direction - current_direction > 180) {
- TurnLeft();
+ } else if (front <  35 ){
+ MoveForward(speed_veryslow);
  } else {
- TurnRight();
- }
- } else if (current_direction > initial_direction) {
- if (current_direction - initial_direction > 180) {
- TurnLeft();
- } else {
- TurnRight();
+ MoveForward(speed_veryfast);
  }
  }
-
- MoveForward( 0xF );
+ } else if (front >  25 ) {
+ MoveForward(speed_veryfast);
  }
  }
 

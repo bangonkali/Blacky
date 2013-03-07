@@ -1,8 +1,8 @@
 
 _ReadCompass:
 
-;libCompass.c,5 :: 		int ReadCompass(char send_serial) {
-;libCompass.c,6 :: 		char buffer[12] = {0};
+;libCompass.c,5 :: 		unsigned char ReadCompass(unsigned char send_serial, unsigned char * read_data) {
+;libCompass.c,6 :: 		unsigned char buffer[12] = {0};
 	CLRF        ReadCompass_buffer_L0+0 
 	CLRF        ReadCompass_buffer_L0+1 
 	CLRF        ReadCompass_buffer_L0+2 
@@ -158,7 +158,7 @@ L_ReadCompass1:
 	BRA         L_ReadCompass1
 	NOP
 	NOP
-;libCompass.c,39 :: 		out_buffer_integer = FindDataFromBuffer(buffer, 12, 7);
+;libCompass.c,39 :: 		out_buffer_integer = FindDataFromBuffer(buffer, 12, 7, read_data, send_serial);
 	MOVLW       ReadCompass_buffer_L0+0
 	MOVWF       FARG_FindDataFromBuffer_buffer+0 
 	MOVLW       hi_addr(ReadCompass_buffer_L0+0)
@@ -167,6 +167,12 @@ L_ReadCompass1:
 	MOVWF       FARG_FindDataFromBuffer_buffer_length+0 
 	MOVLW       7
 	MOVWF       FARG_FindDataFromBuffer_data_length+0 
+	MOVF        FARG_ReadCompass_read_data+0, 0 
+	MOVWF       FARG_FindDataFromBuffer_read_data+0 
+	MOVF        FARG_ReadCompass_read_data+1, 0 
+	MOVWF       FARG_FindDataFromBuffer_read_data+1 
+	MOVF        FARG_ReadCompass_send_serial+0, 0 
+	MOVWF       FARG_FindDataFromBuffer_send_serial+0 
 	CALL        _FindDataFromBuffer+0, 0
 	MOVF        R0, 0 
 	MOVWF       ReadCompass_out_buffer_integer_L0+0 
@@ -184,103 +190,101 @@ L_ReadCompass2:
 	BRA         L_ReadCompass2
 	NOP
 	NOP
-;libCompass.c,43 :: 		if (send_serial == 1) {
-	MOVF        FARG_ReadCompass_send_serial+0, 0 
-	XORLW       1
-	BTFSS       STATUS+0, 2 
-	GOTO        L_ReadCompass3
-;libCompass.c,45 :: 		skewed_output_integer = Skew(out_buffer_integer, 360, 255);
+;libCompass.c,42 :: 		return Skew(out_buffer_integer, 359, 124);
 	MOVF        ReadCompass_out_buffer_integer_L0+0, 0 
-	MOVWF       FARG_Skew_input+0 
+	MOVWF       R0 
 	MOVF        ReadCompass_out_buffer_integer_L0+1, 0 
-	MOVWF       FARG_Skew_input+1 
-	MOVLW       104
-	MOVWF       FARG_Skew_maximum+0 
-	MOVLW       1
-	MOVWF       FARG_Skew_maximum+1 
-	MOVLW       255
-	MOVWF       FARG_Skew_scaled_max+0 
+	MOVWF       R1 
+	CALL        _Word2Double+0, 0
+	MOVF        R0, 0 
+	MOVWF       FARG_Skew_cnt+0 
+	MOVF        R1, 0 
+	MOVWF       FARG_Skew_cnt+1 
+	MOVF        R2, 0 
+	MOVWF       FARG_Skew_cnt+2 
+	MOVF        R3, 0 
+	MOVWF       FARG_Skew_cnt+3 
 	MOVLW       0
-	MOVWF       FARG_Skew_scaled_max+1 
+	MOVWF       FARG_Skew_max+0 
+	MOVLW       128
+	MOVWF       FARG_Skew_max+1 
+	MOVLW       51
+	MOVWF       FARG_Skew_max+2 
+	MOVLW       135
+	MOVWF       FARG_Skew_max+3 
+	MOVLW       0
+	MOVWF       FARG_Skew_scale+0 
+	MOVLW       0
+	MOVWF       FARG_Skew_scale+1 
+	MOVLW       120
+	MOVWF       FARG_Skew_scale+2 
+	MOVLW       133
+	MOVWF       FARG_Skew_scale+3 
 	CALL        _Skew+0, 0
-;libCompass.c,52 :: 		}
-L_ReadCompass3:
-;libCompass.c,53 :: 		} else {
-	GOTO        L_ReadCompass4
+	GOTO        L_end_ReadCompass
+;libCompass.c,43 :: 		} else {
 L_ReadCompass0:
-;libCompass.c,54 :: 		if (send_serial == 1) {
+;libCompass.c,44 :: 		if (send_serial == 1) {
 	MOVF        FARG_ReadCompass_send_serial+0, 0 
 	XORLW       1
 	BTFSS       STATUS+0, 2 
-	GOTO        L_ReadCompass5
-;libCompass.c,55 :: 		transmit_rf(0xFF);
+	GOTO        L_ReadCompass4
+;libCompass.c,45 :: 		transmit_rf(0xFF);
 	MOVLW       255
 	MOVWF       FARG_transmit_rf_input+0 
 	CALL        _transmit_rf+0, 0
-;libCompass.c,56 :: 		transmit_rf(0xFF);
+;libCompass.c,46 :: 		transmit_rf(0xFF);
 	MOVLW       255
 	MOVWF       FARG_transmit_rf_input+0 
 	CALL        _transmit_rf+0, 0
-;libCompass.c,57 :: 		transmit_rf(0xFF);
+;libCompass.c,47 :: 		transmit_rf(0xFF);
 	MOVLW       255
 	MOVWF       FARG_transmit_rf_input+0 
 	CALL        _transmit_rf+0, 0
-;libCompass.c,58 :: 		}
-L_ReadCompass5:
-;libCompass.c,59 :: 		}
+;libCompass.c,48 :: 		}
 L_ReadCompass4:
-;libCompass.c,60 :: 		return 0;
+;libCompass.c,50 :: 		return 0;
 	CLRF        R0 
-	CLRF        R1 
-;libCompass.c,61 :: 		}
+;libCompass.c,51 :: 		}
 L_end_ReadCompass:
 	RETURN      0
 ; end of _ReadCompass
 
 _FindDataFromBuffer:
 
-;libCompass.c,63 :: 		int FindDataFromBuffer(char *buffer, char buffer_length, char data_length) {
-;libCompass.c,64 :: 		int i=0;
+;libCompass.c,53 :: 		unsigned int FindDataFromBuffer(unsigned char *buffer, unsigned char buffer_length, unsigned char data_length, unsigned char * read_data, unsigned char send_serial) {
+;libCompass.c,54 :: 		unsigned int i=0;
 	CLRF        FindDataFromBuffer_i_L0+0 
 	CLRF        FindDataFromBuffer_i_L0+1 
-	CLRF        FindDataFromBuffer_j_L0+0 
-	CLRF        FindDataFromBuffer_j_L0+1 
-	CLRF        FindDataFromBuffer_j_L0+2 
-	CLRF        FindDataFromBuffer_j_L0+3 
-	CLRF        FindDataFromBuffer_j_L0+4 
-;libCompass.c,67 :: 		for (i; i<buffer_length-data_length; i++) {
-L_FindDataFromBuffer6:
+;libCompass.c,56 :: 		for (i; i<buffer_length-data_length; i++) {
+L_FindDataFromBuffer5:
 	MOVF        FARG_FindDataFromBuffer_data_length+0, 0 
 	SUBWF       FARG_FindDataFromBuffer_buffer_length+0, 0 
 	MOVWF       R1 
 	CLRF        R2 
 	MOVLW       0
 	SUBWFB      R2, 1 
-	MOVLW       128
-	XORWF       FindDataFromBuffer_i_L0+1, 0 
-	MOVWF       R0 
-	MOVLW       128
-	XORWF       R2, 0 
-	SUBWF       R0, 0 
+	MOVF        R2, 0 
+	SUBWF       FindDataFromBuffer_i_L0+1, 0 
 	BTFSS       STATUS+0, 2 
 	GOTO        L__FindDataFromBuffer15
 	MOVF        R1, 0 
 	SUBWF       FindDataFromBuffer_i_L0+0, 0 
 L__FindDataFromBuffer15:
 	BTFSC       STATUS+0, 0 
-	GOTO        L_FindDataFromBuffer7
-;libCompass.c,69 :: 		buffer[0+i] == 3 &&
+	GOTO        L_FindDataFromBuffer6
+;libCompass.c,58 :: 		buffer[0+i] == 3 &&
 	MOVF        FindDataFromBuffer_i_L0+0, 0 
 	ADDWF       FARG_FindDataFromBuffer_buffer+0, 0 
 	MOVWF       FSR0 
 	MOVF        FindDataFromBuffer_i_L0+1, 0 
 	ADDWFC      FARG_FindDataFromBuffer_buffer+1, 0 
 	MOVWF       FSR0H 
-;libCompass.c,70 :: 		buffer[1+i] == 2 &&
+;libCompass.c,59 :: 		buffer[1+i] == 2 &&
 	MOVF        POSTINC0+0, 0 
 	XORLW       3
 	BTFSS       STATUS+0, 2 
-	GOTO        L_FindDataFromBuffer11
+	GOTO        L_FindDataFromBuffer10
 	MOVLW       1
 	ADDWF       FindDataFromBuffer_i_L0+0, 0 
 	MOVWF       R0 
@@ -296,8 +300,8 @@ L__FindDataFromBuffer15:
 	MOVF        POSTINC0+0, 0 
 	XORLW       2
 	BTFSS       STATUS+0, 2 
-	GOTO        L_FindDataFromBuffer11
-;libCompass.c,71 :: 		buffer[5+i] == 3 &&
+	GOTO        L_FindDataFromBuffer10
+;libCompass.c,60 :: 		buffer[5+i] == 3 &&
 	MOVLW       5
 	ADDWF       FindDataFromBuffer_i_L0+0, 0 
 	MOVWF       R0 
@@ -313,8 +317,8 @@ L__FindDataFromBuffer15:
 	MOVF        POSTINC0+0, 0 
 	XORLW       3
 	BTFSS       STATUS+0, 2 
-	GOTO        L_FindDataFromBuffer11
-;libCompass.c,72 :: 		buffer[6+i] == 2
+	GOTO        L_FindDataFromBuffer10
+;libCompass.c,61 :: 		buffer[6+i] == 2
 	MOVLW       6
 	ADDWF       FindDataFromBuffer_i_L0+0, 0 
 	MOVWF       R0 
@@ -330,10 +334,10 @@ L__FindDataFromBuffer15:
 	MOVF        POSTINC0+0, 0 
 	XORLW       2
 	BTFSS       STATUS+0, 2 
-	GOTO        L_FindDataFromBuffer11
-;libCompass.c,73 :: 		)
+	GOTO        L_FindDataFromBuffer10
+;libCompass.c,62 :: 		)
 L__FindDataFromBuffer12:
-;libCompass.c,75 :: 		j[0] = buffer[2+i];
+;libCompass.c,64 :: 		read_data[0] = buffer[2+i];
 	MOVLW       2
 	ADDWF       FindDataFromBuffer_i_L0+0, 0 
 	MOVWF       R0 
@@ -346,9 +350,17 @@ L__FindDataFromBuffer12:
 	MOVF        R1, 0 
 	ADDWFC      FARG_FindDataFromBuffer_buffer+1, 0 
 	MOVWF       FSR0H 
+	MOVFF       FARG_FindDataFromBuffer_read_data+0, FSR1
+	MOVFF       FARG_FindDataFromBuffer_read_data+1, FSR1H
 	MOVF        POSTINC0+0, 0 
-	MOVWF       FindDataFromBuffer_j_L0+0 
-;libCompass.c,76 :: 		j[1] = buffer[3+i];
+	MOVWF       POSTINC1+0 
+;libCompass.c,65 :: 		read_data[1] = buffer[3+i];
+	MOVLW       1
+	ADDWF       FARG_FindDataFromBuffer_read_data+0, 0 
+	MOVWF       FSR1 
+	MOVLW       0
+	ADDWFC      FARG_FindDataFromBuffer_read_data+1, 0 
+	MOVWF       FSR1H 
 	MOVLW       3
 	ADDWF       FindDataFromBuffer_i_L0+0, 0 
 	MOVWF       R0 
@@ -362,8 +374,14 @@ L__FindDataFromBuffer12:
 	ADDWFC      FARG_FindDataFromBuffer_buffer+1, 0 
 	MOVWF       FSR0H 
 	MOVF        POSTINC0+0, 0 
-	MOVWF       FindDataFromBuffer_j_L0+1 
-;libCompass.c,77 :: 		j[2] = buffer[4+i];
+	MOVWF       POSTINC1+0 
+;libCompass.c,66 :: 		read_data[2] = buffer[4+i];
+	MOVLW       2
+	ADDWF       FARG_FindDataFromBuffer_read_data+0, 0 
+	MOVWF       FSR1 
+	MOVLW       0
+	ADDWFC      FARG_FindDataFromBuffer_read_data+1, 0 
+	MOVWF       FSR1H 
 	MOVLW       4
 	ADDWF       FindDataFromBuffer_i_L0+0, 0 
 	MOVWF       R0 
@@ -377,37 +395,156 @@ L__FindDataFromBuffer12:
 	ADDWFC      FARG_FindDataFromBuffer_buffer+1, 0 
 	MOVWF       FSR0H 
 	MOVF        POSTINC0+0, 0 
-	MOVWF       FindDataFromBuffer_j_L0+2 
-;libCompass.c,78 :: 		j[3] = '\0';
-	CLRF        FindDataFromBuffer_j_L0+3 
-;libCompass.c,80 :: 		transmit_rf(j[0]);
-	MOVF        FindDataFromBuffer_j_L0+0, 0 
+	MOVWF       POSTINC1+0 
+;libCompass.c,68 :: 		if (send_serial) {
+	MOVF        FARG_FindDataFromBuffer_send_serial+0, 1 
+	BTFSC       STATUS+0, 2 
+	GOTO        L_FindDataFromBuffer11
+;libCompass.c,69 :: 		transmit_rf(buffer[2+i]);
+	MOVLW       2
+	ADDWF       FindDataFromBuffer_i_L0+0, 0 
+	MOVWF       R0 
+	MOVLW       0
+	ADDWFC      FindDataFromBuffer_i_L0+1, 0 
+	MOVWF       R1 
+	MOVF        R0, 0 
+	ADDWF       FARG_FindDataFromBuffer_buffer+0, 0 
+	MOVWF       FSR0 
+	MOVF        R1, 0 
+	ADDWFC      FARG_FindDataFromBuffer_buffer+1, 0 
+	MOVWF       FSR0H 
+	MOVF        POSTINC0+0, 0 
 	MOVWF       FARG_transmit_rf_input+0 
 	CALL        _transmit_rf+0, 0
-;libCompass.c,81 :: 		transmit_rf(j[1]);
-	MOVF        FindDataFromBuffer_j_L0+1, 0 
+;libCompass.c,70 :: 		transmit_rf(buffer[3+i]);
+	MOVLW       3
+	ADDWF       FindDataFromBuffer_i_L0+0, 0 
+	MOVWF       R0 
+	MOVLW       0
+	ADDWFC      FindDataFromBuffer_i_L0+1, 0 
+	MOVWF       R1 
+	MOVF        R0, 0 
+	ADDWF       FARG_FindDataFromBuffer_buffer+0, 0 
+	MOVWF       FSR0 
+	MOVF        R1, 0 
+	ADDWFC      FARG_FindDataFromBuffer_buffer+1, 0 
+	MOVWF       FSR0H 
+	MOVF        POSTINC0+0, 0 
 	MOVWF       FARG_transmit_rf_input+0 
 	CALL        _transmit_rf+0, 0
-;libCompass.c,82 :: 		transmit_rf(j[2]);
-	MOVF        FindDataFromBuffer_j_L0+2, 0 
+;libCompass.c,71 :: 		transmit_rf(buffer[4+i]);
+	MOVLW       4
+	ADDWF       FindDataFromBuffer_i_L0+0, 0 
+	MOVWF       R0 
+	MOVLW       0
+	ADDWFC      FindDataFromBuffer_i_L0+1, 0 
+	MOVWF       R1 
+	MOVF        R0, 0 
+	ADDWF       FARG_FindDataFromBuffer_buffer+0, 0 
+	MOVWF       FSR0 
+	MOVF        R1, 0 
+	ADDWFC      FARG_FindDataFromBuffer_buffer+1, 0 
+	MOVWF       FSR0H 
+	MOVF        POSTINC0+0, 0 
 	MOVWF       FARG_transmit_rf_input+0 
 	CALL        _transmit_rf+0, 0
-;libCompass.c,84 :: 		return atoi(j);
-	MOVLW       FindDataFromBuffer_j_L0+0
-	MOVWF       FARG_atoi_s+0 
-	MOVLW       hi_addr(FindDataFromBuffer_j_L0+0)
-	MOVWF       FARG_atoi_s+1 
-	CALL        _atoi+0, 0
-	GOTO        L_end_FindDataFromBuffer
-;libCompass.c,85 :: 		}
+;libCompass.c,72 :: 		}
 L_FindDataFromBuffer11:
-;libCompass.c,67 :: 		for (i; i<buffer_length-data_length; i++) {
+;libCompass.c,75 :: 		((buffer[2+i]-48) * 100) +
+	MOVLW       2
+	ADDWF       FindDataFromBuffer_i_L0+0, 0 
+	MOVWF       R0 
+	MOVLW       0
+	ADDWFC      FindDataFromBuffer_i_L0+1, 0 
+	MOVWF       R1 
+	MOVF        R0, 0 
+	ADDWF       FARG_FindDataFromBuffer_buffer+0, 0 
+	MOVWF       FSR0 
+	MOVF        R1, 0 
+	ADDWFC      FARG_FindDataFromBuffer_buffer+1, 0 
+	MOVWF       FSR0H 
+	MOVLW       48
+	SUBWF       POSTINC0+0, 0 
+	MOVWF       R0 
+	CLRF        R1 
+	MOVLW       0
+	SUBWFB      R1, 1 
+	MOVLW       100
+	MOVWF       R4 
+	MOVLW       0
+	MOVWF       R5 
+	CALL        _Mul_16x16_U+0, 0
+	MOVF        R0, 0 
+	MOVWF       FLOC__FindDataFromBuffer+0 
+	MOVF        R1, 0 
+	MOVWF       FLOC__FindDataFromBuffer+1 
+	MOVLW       3
+	ADDWF       FindDataFromBuffer_i_L0+0, 0 
+	MOVWF       R0 
+	MOVLW       0
+	ADDWFC      FindDataFromBuffer_i_L0+1, 0 
+	MOVWF       R1 
+;libCompass.c,76 :: 		((buffer[3+i]-48) * 10) +
+	MOVF        R0, 0 
+	ADDWF       FARG_FindDataFromBuffer_buffer+0, 0 
+	MOVWF       FSR0 
+	MOVF        R1, 0 
+	ADDWFC      FARG_FindDataFromBuffer_buffer+1, 0 
+	MOVWF       FSR0H 
+	MOVLW       48
+	SUBWF       POSTINC0+0, 0 
+	MOVWF       R0 
+	CLRF        R1 
+	MOVLW       0
+	SUBWFB      R1, 1 
+	MOVLW       10
+	MOVWF       R4 
+	MOVLW       0
+	MOVWF       R5 
+	CALL        _Mul_16x16_U+0, 0
+	MOVF        R0, 0 
+	ADDWF       FLOC__FindDataFromBuffer+0, 0 
+	MOVWF       R2 
+	MOVF        R1, 0 
+	ADDWFC      FLOC__FindDataFromBuffer+1, 0 
+	MOVWF       R3 
+;libCompass.c,77 :: 		((buffer[4+i]-48) * 1)
+	MOVLW       4
+	ADDWF       FindDataFromBuffer_i_L0+0, 0 
+	MOVWF       R0 
+	MOVLW       0
+	ADDWFC      FindDataFromBuffer_i_L0+1, 0 
+	MOVWF       R1 
+	MOVF        R0, 0 
+	ADDWF       FARG_FindDataFromBuffer_buffer+0, 0 
+	MOVWF       FSR0 
+	MOVF        R1, 0 
+	ADDWFC      FARG_FindDataFromBuffer_buffer+1, 0 
+	MOVWF       FSR0H 
+	MOVLW       48
+	SUBWF       POSTINC0+0, 0 
+	MOVWF       R0 
+	CLRF        R1 
+	MOVLW       0
+	SUBWFB      R1, 1 
+	MOVF        R2, 0 
+	ADDWF       R0, 1 
+	MOVF        R3, 0 
+	ADDWFC      R1, 1 
+;libCompass.c,78 :: 		);
+	GOTO        L_end_FindDataFromBuffer
+;libCompass.c,79 :: 		}
+L_FindDataFromBuffer10:
+;libCompass.c,56 :: 		for (i; i<buffer_length-data_length; i++) {
 	INFSNZ      FindDataFromBuffer_i_L0+0, 1 
 	INCF        FindDataFromBuffer_i_L0+1, 1 
-;libCompass.c,87 :: 		}
-	GOTO        L_FindDataFromBuffer6
-L_FindDataFromBuffer7:
-;libCompass.c,88 :: 		}
+;libCompass.c,81 :: 		}
+	GOTO        L_FindDataFromBuffer5
+L_FindDataFromBuffer6:
+;libCompass.c,83 :: 		return 0;
+	CLRF        R0 
+	CLRF        R1 
+;libCompass.c,84 :: 		}
 L_end_FindDataFromBuffer:
 	RETURN      0
 ; end of _FindDataFromBuffer

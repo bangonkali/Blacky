@@ -13,18 +13,18 @@ extern sfr sbit Trigger_L;
 extern sfr sbit Trigger_F;
 extern sfr sbit Trigger_R;
 
-int ReadPing_L();
-int ReadPing_F();
-int ReadPing_R();
+unsigned int ReadPing_L();
+unsigned int ReadPing_F();
+unsigned int ReadPing_R();
 
-int Count_Distance(double cnt, double max, double scale);
+unsigned int Count_Distance(double cnt, double max, double scale);
 #line 1 "c:/users/bangonkali/desktop/projects/blacky/mikroc/coreping.h"
 
 
 
-int ReadPing(int *left, int *front, int *right) ;
+unsigned int ReadPing(unsigned int *left, unsigned int *front, unsigned int *right) ;
 #line 4 "C:/Users/Bangonkali/Desktop/Projects/Blacky/MikroC/corePing.c"
-int ReadPing(int *left, int *front, int *right)
+unsigned int ReadPing(unsigned int *left, unsigned int *front, unsigned int *right)
 {
  *right = ReadPing_R();
  *left = ReadPing_L();
