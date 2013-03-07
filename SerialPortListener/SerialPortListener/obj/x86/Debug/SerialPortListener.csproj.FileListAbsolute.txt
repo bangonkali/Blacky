@@ -14,3 +14,4 @@ C:\Users\Bangonkali\Desktop\Projects\Blacky\SerialPortListener\SerialPortListene
 C:\Users\Bangonkali\Desktop\Projects\Blacky\SerialPortListener\SerialPortListener\bin\Debug\SerialPortListener.pdb
 C:\Users\Bangonkali\Desktop\Projects\Blacky\SerialPortListener\SerialPortListener\obj\x86\Debug\SerialPortListener.exe
 C:\Users\Bangonkali\Desktop\Projects\Blacky\SerialPortListener\SerialPortListener\obj\x86\Debug\SerialPortListener.pdb
+C:\Users\Bangonkali\Desktop\Projects\Blacky\SerialPortListener\SerialPortListener\obj\x86\Debug\SerialPortListener.csprojResolveAssemblyReference.cache
