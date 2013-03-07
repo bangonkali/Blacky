@@ -11,8 +11,6 @@ C:\Users\Bangonkali\Desktop\Projects\Blacky\SerialPortListener\SerialPortListene
 C:\Users\Bangonkali\Desktop\Projects\Blacky\SerialPortListener\SerialPortListener\obj\x86\Release\SerialPortListener.pdb
 C:\Users\Bangonkali\Desktop\Projects\Blacky\SerialPortListener\SerialPortListener\bin\Release\SerialPortListener.exe
 C:\Users\Bangonkali\Desktop\Projects\Blacky\SerialPortListener\SerialPortListener\bin\Release\SerialPortListener.pdb
-C:\Users\Bangonkali\Desktop\Projects\Blacky\SerialPortListener\SerialPortListener\bin\Release\AGauge.pdb
-C:\Users\Bangonkali\Desktop\Projects\Blacky\SerialPortListener\SerialPortListener\obj\x86\Release\SerialPortListener.csprojResolveAssemblyReference.cache
 C:\Users\Bangonkali\Desktop\Projects\Blacky\SerialPortListener\SerialPortListener\obj\x86\Release\SerialPortListener.MainForm.resources
 C:\Users\Bangonkali\Desktop\Projects\Blacky\SerialPortListener\SerialPortListener\obj\x86\Release\SerialPortListener.Properties.Resources.resources
 C:\Users\Bangonkali\Desktop\Projects\Blacky\SerialPortListener\SerialPortListener\obj\x86\Release\SerialPortListener.csproj.GenerateResource.Cache
