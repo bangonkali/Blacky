@@ -76,11 +76,11 @@ void main() {
                 initial_direction = ReadCompass(0, compass_initial);
             }
             if (configuration == 1) {
-                speed_veryfast = 7;
+                speed_veryfast = 0xFF; // should be max speed
                 speed_veryslow = 3;
                 enable_compass = 2; // sparce compass (every COMPASS_SPARCE cycle);
             } else if (configuration == 2) {
-                speed_veryfast = 7;
+                speed_veryfast = 0xFF; // should be max speed
                 speed_veryslow = 3;
                 enable_compass = 1; // compass reading after each cycle
             } else if (configuration == 3) {
@@ -92,8 +92,8 @@ void main() {
                 speed_veryslow = 2;
                 enable_compass = 1; // compass reading after each cycle
             } else if (configuration == 5) {
-                speed_veryfast = 7;
-                speed_veryslow = 3;
+                speed_veryfast = 0xFF;
+                speed_veryslow = 3; // should be max speed
                 enable_compass = 0; // no compass after each cycle
             } else if (configuration == 6) {
                 speed_veryfast = 5;
@@ -113,14 +113,18 @@ void main() {
                         TurnRight();
                     } else {
                         MoveBackward(speed_veryfast);
-                        Delay_ms(500);
+                        Delay_ms(400);
+                        TurnRight();
+                        Delay_ms(100);
                     }
                 }  else {
                     if(cycle_compass != COMPASS_SPARCE) {
                         TurnLeft();
                     } else {
                         MoveBackward(speed_veryfast);
-                        Delay_ms(500);
+                        Delay_ms(400);
+                        TurnLeft();
+                        Delay_ms(100);
                     }
                 }
             } else if (right < MIN_SAFE_DISTANCE && front < MIN_SAFE_DISTANCE && left >= MIN_SAFE_DISTANCE) {
@@ -128,37 +132,33 @@ void main() {
                     TurnRight();
                 } else {
                     MoveBackward(speed_veryfast);
-                    Delay_ms(500);
+                    Delay_ms(400);
+                    TurnRight();
+                    Delay_ms(100);
                 }
             } else if (left < MIN_SAFE_DISTANCE && front < MIN_SAFE_DISTANCE && right >= MIN_SAFE_DISTANCE) {
                 if(cycle_compass != COMPASS_SPARCE) {
                     TurnLeft();
                 } else {
                     MoveBackward(speed_veryfast);
-                    Delay_ms(500);
+                    Delay_ms(400);
+                    TurnLeft();
+                    Delay_ms(100);
+                    
                 }
             } else if (left < MIN_SAFE_DISTANCE && front < MIN_SAFE_DISTANCE && right < MIN_SAFE_DISTANCE) {
                 MoveBackward(speed_veryfast);
             } else if (front > MIN_SAFE_DISTANCE && left > MIN_SAFE_DISTANCE && right > MIN_SAFE_DISTANCE) {
-                if (initial_direction > current_direction && abs(initial_direction - current_direction) > 3) {
-                    if(cycle_compass != COMPASS_SPARCE) {
-                        TurnRight();
-                    }
-                } else if (current_direction > initial_direction && abs(initial_direction - current_direction) > 3) {
-                    if(cycle_compass != COMPASS_SPARCE) {
-                        TurnLeft();
-                    }
+                if(abs(initial_direction - current_direction) > 4) {
+                    TurnRight();
                 } else {
-                    if (cycle_compass == COMPASS_SPARCE) {
-                        MoveForward(0);
-                    } else if (front < MIN_SLOW_DISTANCE){
-                        MoveForward(speed_veryslow);
-                    } else {
-                        MoveForward(speed_veryfast);
-                    }
+                    MoveForward(speed_veryfast);
                 }
             } else if (front > MIN_SAFE_DISTANCE) {
                 MoveForward(speed_veryfast);
+            } else {
+                MoveBackward(speed_veryfast);
+                Delay_ms(400);
             }
         }
         

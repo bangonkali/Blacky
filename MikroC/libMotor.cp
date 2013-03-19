@@ -37,12 +37,12 @@ void Turn(unsigned char delay, unsigned char speed, unsigned char direction) {
  LATB.B1 = 1;
  LATB.B2 = 0;
 
- LATB.B3 = 0;
+ LATB.B3 = 1;
  LATB.B4 = 0;
  } else {
 
  LATB.B1 = 0;
- LATB.B2 = 0;
+ LATB.B2 = 1;
 
  LATB.B3 = 0;
  LATB.B4 = 1;

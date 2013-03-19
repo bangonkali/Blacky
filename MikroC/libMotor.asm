@@ -61,8 +61,8 @@ _Turn:
 	BSF         LATB+0, 1 
 ;libMotor.c,23 :: 		LATB.B2 = 0;
 	BCF         LATB+0, 2 
-;libMotor.c,25 :: 		LATB.B3 = 0;
-	BCF         LATB+0, 3 
+;libMotor.c,25 :: 		LATB.B3 = 1;
+	BSF         LATB+0, 3 
 ;libMotor.c,26 :: 		LATB.B4 = 0;
 	BCF         LATB+0, 4 
 ;libMotor.c,27 :: 		} else {
@@ -70,8 +70,8 @@ _Turn:
 L_Turn0:
 ;libMotor.c,29 :: 		LATB.B1 = 0;
 	BCF         LATB+0, 1 
-;libMotor.c,30 :: 		LATB.B2 = 0;
-	BCF         LATB+0, 2 
+;libMotor.c,30 :: 		LATB.B2 = 1;
+	BSF         LATB+0, 2 
 ;libMotor.c,32 :: 		LATB.B3 = 0;
 	BCF         LATB+0, 3 
 ;libMotor.c,33 :: 		LATB.B4 = 1;

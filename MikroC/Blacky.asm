@@ -258,8 +258,8 @@ L_main12:
 	XORLW       1
 	BTFSS       STATUS+0, 2 
 	GOTO        L_main13
-;Blacky.c,79 :: 		speed_veryfast = 7;
-	MOVLW       7
+;Blacky.c,79 :: 		speed_veryfast = 0xFF; // should be max speed
+	MOVLW       255
 	MOVWF       _speed_veryfast+0 
 ;Blacky.c,80 :: 		speed_veryslow = 3;
 	MOVLW       3
@@ -274,8 +274,8 @@ L_main13:
 	XORLW       2
 	BTFSS       STATUS+0, 2 
 	GOTO        L_main15
-;Blacky.c,83 :: 		speed_veryfast = 7;
-	MOVLW       7
+;Blacky.c,83 :: 		speed_veryfast = 0xFF; // should be max speed
+	MOVLW       255
 	MOVWF       _speed_veryfast+0 
 ;Blacky.c,84 :: 		speed_veryslow = 3;
 	MOVLW       3
@@ -322,10 +322,10 @@ L_main19:
 	XORLW       5
 	BTFSS       STATUS+0, 2 
 	GOTO        L_main21
-;Blacky.c,95 :: 		speed_veryfast = 7;
-	MOVLW       7
+;Blacky.c,95 :: 		speed_veryfast = 0xFF;
+	MOVLW       255
 	MOVWF       _speed_veryfast+0 
-;Blacky.c,96 :: 		speed_veryslow = 3;
+;Blacky.c,96 :: 		speed_veryslow = 3; // should be max speed
 	MOVLW       3
 	MOVWF       _speed_veryslow+0 
 ;Blacky.c,97 :: 		enable_compass = 0; // no compass after each cycle
@@ -372,39 +372,39 @@ L_main11:
 	MOVLW       0
 	SUBWF       _front+1, 0 
 	BTFSS       STATUS+0, 2 
-	GOTO        L__main85
-	MOVLW       25
+	GOTO        L__main77
+	MOVLW       20
 	SUBWF       _front+0, 0 
-L__main85:
+L__main77:
 	BTFSC       STATUS+0, 0 
 	GOTO        L_main28
 	MOVLW       0
 	SUBWF       _right+1, 0 
 	BTFSS       STATUS+0, 2 
-	GOTO        L__main86
-	MOVLW       25
+	GOTO        L__main78
+	MOVLW       20
 	SUBWF       _right+0, 0 
-L__main86:
+L__main78:
 	BTFSS       STATUS+0, 0 
 	GOTO        L_main28
 	MOVLW       0
 	SUBWF       _left+1, 0 
 	BTFSS       STATUS+0, 2 
-	GOTO        L__main87
-	MOVLW       25
+	GOTO        L__main79
+	MOVLW       20
 	SUBWF       _left+0, 0 
-L__main87:
+L__main79:
 	BTFSS       STATUS+0, 0 
 	GOTO        L_main28
-L__main83:
+L__main75:
 ;Blacky.c,111 :: 		if (right > left) {
 	MOVF        _right+1, 0 
 	SUBWF       _left+1, 0 
 	BTFSS       STATUS+0, 2 
-	GOTO        L__main88
+	GOTO        L__main80
 	MOVF        _right+0, 0 
 	SUBWF       _left+0, 0 
-L__main88:
+L__main80:
 	BTFSC       STATUS+0, 0 
 	GOTO        L_main29
 ;Blacky.c,112 :: 		if(cycle_compass != COMPASS_SPARCE) {
@@ -421,12 +421,12 @@ L_main30:
 	MOVF        _speed_veryfast+0, 0 
 	MOVWF       FARG_MoveBackward_speed+0 
 	CALL        _MoveBackward+0, 0
-;Blacky.c,116 :: 		Delay_ms(500);
-	MOVLW       6
+;Blacky.c,116 :: 		Delay_ms(400);
+	MOVLW       5
 	MOVWF       R11, 0
-	MOVLW       19
+	MOVLW       15
 	MOVWF       R12, 0
-	MOVLW       173
+	MOVLW       241
 	MOVWF       R13, 0
 L_main32:
 	DECFSZ      R13, 1, 1
@@ -435,392 +435,394 @@ L_main32:
 	BRA         L_main32
 	DECFSZ      R11, 1, 1
 	BRA         L_main32
+;Blacky.c,117 :: 		TurnRight();
+	CALL        _TurnRight+0, 0
+;Blacky.c,118 :: 		Delay_ms(100);
+	MOVLW       2
+	MOVWF       R11, 0
+	MOVLW       4
+	MOVWF       R12, 0
+	MOVLW       186
+	MOVWF       R13, 0
+L_main33:
+	DECFSZ      R13, 1, 1
+	BRA         L_main33
+	DECFSZ      R12, 1, 1
+	BRA         L_main33
+	DECFSZ      R11, 1, 1
+	BRA         L_main33
 	NOP
-	NOP
-;Blacky.c,117 :: 		}
+;Blacky.c,119 :: 		}
 L_main31:
-;Blacky.c,118 :: 		}  else {
-	GOTO        L_main33
+;Blacky.c,120 :: 		}  else {
+	GOTO        L_main34
 L_main29:
-;Blacky.c,119 :: 		if(cycle_compass != COMPASS_SPARCE) {
+;Blacky.c,121 :: 		if(cycle_compass != COMPASS_SPARCE) {
 	MOVF        _cycle_compass+0, 0 
 	XORLW       6
 	BTFSC       STATUS+0, 2 
-	GOTO        L_main34
-;Blacky.c,120 :: 		TurnLeft();
-	CALL        _TurnLeft+0, 0
-;Blacky.c,121 :: 		} else {
 	GOTO        L_main35
-L_main34:
-;Blacky.c,122 :: 		MoveBackward(speed_veryfast);
+;Blacky.c,122 :: 		TurnLeft();
+	CALL        _TurnLeft+0, 0
+;Blacky.c,123 :: 		} else {
+	GOTO        L_main36
+L_main35:
+;Blacky.c,124 :: 		MoveBackward(speed_veryfast);
 	MOVF        _speed_veryfast+0, 0 
 	MOVWF       FARG_MoveBackward_speed+0 
 	CALL        _MoveBackward+0, 0
-;Blacky.c,123 :: 		Delay_ms(500);
-	MOVLW       6
+;Blacky.c,125 :: 		Delay_ms(400);
+	MOVLW       5
 	MOVWF       R11, 0
-	MOVLW       19
+	MOVLW       15
 	MOVWF       R12, 0
-	MOVLW       173
+	MOVLW       241
 	MOVWF       R13, 0
-L_main36:
+L_main37:
 	DECFSZ      R13, 1, 1
-	BRA         L_main36
+	BRA         L_main37
 	DECFSZ      R12, 1, 1
-	BRA         L_main36
+	BRA         L_main37
 	DECFSZ      R11, 1, 1
-	BRA         L_main36
+	BRA         L_main37
+;Blacky.c,126 :: 		TurnLeft();
+	CALL        _TurnLeft+0, 0
+;Blacky.c,127 :: 		Delay_ms(100);
+	MOVLW       2
+	MOVWF       R11, 0
+	MOVLW       4
+	MOVWF       R12, 0
+	MOVLW       186
+	MOVWF       R13, 0
+L_main38:
+	DECFSZ      R13, 1, 1
+	BRA         L_main38
+	DECFSZ      R12, 1, 1
+	BRA         L_main38
+	DECFSZ      R11, 1, 1
+	BRA         L_main38
 	NOP
-	NOP
-;Blacky.c,124 :: 		}
-L_main35:
-;Blacky.c,125 :: 		}
-L_main33:
-;Blacky.c,126 :: 		} else if (right < MIN_SAFE_DISTANCE && front < MIN_SAFE_DISTANCE && left >= MIN_SAFE_DISTANCE) {
-	GOTO        L_main37
+;Blacky.c,128 :: 		}
+L_main36:
+;Blacky.c,129 :: 		}
+L_main34:
+;Blacky.c,130 :: 		} else if (right < MIN_SAFE_DISTANCE && front < MIN_SAFE_DISTANCE && left >= MIN_SAFE_DISTANCE) {
+	GOTO        L_main39
 L_main28:
 	MOVLW       0
 	SUBWF       _right+1, 0 
 	BTFSS       STATUS+0, 2 
+	GOTO        L__main81
+	MOVLW       20
+	SUBWF       _right+0, 0 
+L__main81:
+	BTFSC       STATUS+0, 0 
+	GOTO        L_main42
+	MOVLW       0
+	SUBWF       _front+1, 0 
+	BTFSS       STATUS+0, 2 
+	GOTO        L__main82
+	MOVLW       20
+	SUBWF       _front+0, 0 
+L__main82:
+	BTFSC       STATUS+0, 0 
+	GOTO        L_main42
+	MOVLW       0
+	SUBWF       _left+1, 0 
+	BTFSS       STATUS+0, 2 
+	GOTO        L__main83
+	MOVLW       20
+	SUBWF       _left+0, 0 
+L__main83:
+	BTFSS       STATUS+0, 0 
+	GOTO        L_main42
+L__main74:
+;Blacky.c,131 :: 		if(cycle_compass != COMPASS_SPARCE) {
+	MOVF        _cycle_compass+0, 0 
+	XORLW       6
+	BTFSC       STATUS+0, 2 
+	GOTO        L_main43
+;Blacky.c,132 :: 		TurnRight();
+	CALL        _TurnRight+0, 0
+;Blacky.c,133 :: 		} else {
+	GOTO        L_main44
+L_main43:
+;Blacky.c,134 :: 		MoveBackward(speed_veryfast);
+	MOVF        _speed_veryfast+0, 0 
+	MOVWF       FARG_MoveBackward_speed+0 
+	CALL        _MoveBackward+0, 0
+;Blacky.c,135 :: 		Delay_ms(400);
+	MOVLW       5
+	MOVWF       R11, 0
+	MOVLW       15
+	MOVWF       R12, 0
+	MOVLW       241
+	MOVWF       R13, 0
+L_main45:
+	DECFSZ      R13, 1, 1
+	BRA         L_main45
+	DECFSZ      R12, 1, 1
+	BRA         L_main45
+	DECFSZ      R11, 1, 1
+	BRA         L_main45
+;Blacky.c,136 :: 		TurnRight();
+	CALL        _TurnRight+0, 0
+;Blacky.c,137 :: 		Delay_ms(100);
+	MOVLW       2
+	MOVWF       R11, 0
+	MOVLW       4
+	MOVWF       R12, 0
+	MOVLW       186
+	MOVWF       R13, 0
+L_main46:
+	DECFSZ      R13, 1, 1
+	BRA         L_main46
+	DECFSZ      R12, 1, 1
+	BRA         L_main46
+	DECFSZ      R11, 1, 1
+	BRA         L_main46
+	NOP
+;Blacky.c,138 :: 		}
+L_main44:
+;Blacky.c,139 :: 		} else if (left < MIN_SAFE_DISTANCE && front < MIN_SAFE_DISTANCE && right >= MIN_SAFE_DISTANCE) {
+	GOTO        L_main47
+L_main42:
+	MOVLW       0
+	SUBWF       _left+1, 0 
+	BTFSS       STATUS+0, 2 
+	GOTO        L__main84
+	MOVLW       20
+	SUBWF       _left+0, 0 
+L__main84:
+	BTFSC       STATUS+0, 0 
+	GOTO        L_main50
+	MOVLW       0
+	SUBWF       _front+1, 0 
+	BTFSS       STATUS+0, 2 
+	GOTO        L__main85
+	MOVLW       20
+	SUBWF       _front+0, 0 
+L__main85:
+	BTFSC       STATUS+0, 0 
+	GOTO        L_main50
+	MOVLW       0
+	SUBWF       _right+1, 0 
+	BTFSS       STATUS+0, 2 
+	GOTO        L__main86
+	MOVLW       20
+	SUBWF       _right+0, 0 
+L__main86:
+	BTFSS       STATUS+0, 0 
+	GOTO        L_main50
+L__main73:
+;Blacky.c,140 :: 		if(cycle_compass != COMPASS_SPARCE) {
+	MOVF        _cycle_compass+0, 0 
+	XORLW       6
+	BTFSC       STATUS+0, 2 
+	GOTO        L_main51
+;Blacky.c,141 :: 		TurnLeft();
+	CALL        _TurnLeft+0, 0
+;Blacky.c,142 :: 		} else {
+	GOTO        L_main52
+L_main51:
+;Blacky.c,143 :: 		MoveBackward(speed_veryfast);
+	MOVF        _speed_veryfast+0, 0 
+	MOVWF       FARG_MoveBackward_speed+0 
+	CALL        _MoveBackward+0, 0
+;Blacky.c,144 :: 		Delay_ms(400);
+	MOVLW       5
+	MOVWF       R11, 0
+	MOVLW       15
+	MOVWF       R12, 0
+	MOVLW       241
+	MOVWF       R13, 0
+L_main53:
+	DECFSZ      R13, 1, 1
+	BRA         L_main53
+	DECFSZ      R12, 1, 1
+	BRA         L_main53
+	DECFSZ      R11, 1, 1
+	BRA         L_main53
+;Blacky.c,145 :: 		TurnLeft();
+	CALL        _TurnLeft+0, 0
+;Blacky.c,146 :: 		Delay_ms(100);
+	MOVLW       2
+	MOVWF       R11, 0
+	MOVLW       4
+	MOVWF       R12, 0
+	MOVLW       186
+	MOVWF       R13, 0
+L_main54:
+	DECFSZ      R13, 1, 1
+	BRA         L_main54
+	DECFSZ      R12, 1, 1
+	BRA         L_main54
+	DECFSZ      R11, 1, 1
+	BRA         L_main54
+	NOP
+;Blacky.c,148 :: 		}
+L_main52:
+;Blacky.c,149 :: 		} else if (left < MIN_SAFE_DISTANCE && front < MIN_SAFE_DISTANCE && right < MIN_SAFE_DISTANCE) {
+	GOTO        L_main55
+L_main50:
+	MOVLW       0
+	SUBWF       _left+1, 0 
+	BTFSS       STATUS+0, 2 
+	GOTO        L__main87
+	MOVLW       20
+	SUBWF       _left+0, 0 
+L__main87:
+	BTFSC       STATUS+0, 0 
+	GOTO        L_main58
+	MOVLW       0
+	SUBWF       _front+1, 0 
+	BTFSS       STATUS+0, 2 
+	GOTO        L__main88
+	MOVLW       20
+	SUBWF       _front+0, 0 
+L__main88:
+	BTFSC       STATUS+0, 0 
+	GOTO        L_main58
+	MOVLW       0
+	SUBWF       _right+1, 0 
+	BTFSS       STATUS+0, 2 
 	GOTO        L__main89
-	MOVLW       25
+	MOVLW       20
 	SUBWF       _right+0, 0 
 L__main89:
 	BTFSC       STATUS+0, 0 
-	GOTO        L_main40
-	MOVLW       0
-	SUBWF       _front+1, 0 
-	BTFSS       STATUS+0, 2 
-	GOTO        L__main90
-	MOVLW       25
-	SUBWF       _front+0, 0 
-L__main90:
-	BTFSC       STATUS+0, 0 
-	GOTO        L_main40
-	MOVLW       0
-	SUBWF       _left+1, 0 
-	BTFSS       STATUS+0, 2 
-	GOTO        L__main91
-	MOVLW       25
-	SUBWF       _left+0, 0 
-L__main91:
-	BTFSS       STATUS+0, 0 
-	GOTO        L_main40
-L__main82:
-;Blacky.c,127 :: 		if(cycle_compass != COMPASS_SPARCE) {
-	MOVF        _cycle_compass+0, 0 
-	XORLW       6
-	BTFSC       STATUS+0, 2 
-	GOTO        L_main41
-;Blacky.c,128 :: 		TurnRight();
-	CALL        _TurnRight+0, 0
-;Blacky.c,129 :: 		} else {
-	GOTO        L_main42
-L_main41:
-;Blacky.c,130 :: 		MoveBackward(speed_veryfast);
+	GOTO        L_main58
+L__main72:
+;Blacky.c,150 :: 		MoveBackward(speed_veryfast);
 	MOVF        _speed_veryfast+0, 0 
 	MOVWF       FARG_MoveBackward_speed+0 
 	CALL        _MoveBackward+0, 0
-;Blacky.c,131 :: 		Delay_ms(500);
-	MOVLW       6
-	MOVWF       R11, 0
-	MOVLW       19
-	MOVWF       R12, 0
-	MOVLW       173
-	MOVWF       R13, 0
-L_main43:
-	DECFSZ      R13, 1, 1
-	BRA         L_main43
-	DECFSZ      R12, 1, 1
-	BRA         L_main43
-	DECFSZ      R11, 1, 1
-	BRA         L_main43
-	NOP
-	NOP
-;Blacky.c,132 :: 		}
-L_main42:
-;Blacky.c,133 :: 		} else if (left < MIN_SAFE_DISTANCE && front < MIN_SAFE_DISTANCE && right >= MIN_SAFE_DISTANCE) {
-	GOTO        L_main44
-L_main40:
-	MOVLW       0
-	SUBWF       _left+1, 0 
-	BTFSS       STATUS+0, 2 
-	GOTO        L__main92
-	MOVLW       25
-	SUBWF       _left+0, 0 
-L__main92:
-	BTFSC       STATUS+0, 0 
-	GOTO        L_main47
-	MOVLW       0
-	SUBWF       _front+1, 0 
-	BTFSS       STATUS+0, 2 
-	GOTO        L__main93
-	MOVLW       25
-	SUBWF       _front+0, 0 
-L__main93:
-	BTFSC       STATUS+0, 0 
-	GOTO        L_main47
-	MOVLW       0
-	SUBWF       _right+1, 0 
-	BTFSS       STATUS+0, 2 
-	GOTO        L__main94
-	MOVLW       25
-	SUBWF       _right+0, 0 
-L__main94:
-	BTFSS       STATUS+0, 0 
-	GOTO        L_main47
-L__main81:
-;Blacky.c,134 :: 		if(cycle_compass != COMPASS_SPARCE) {
-	MOVF        _cycle_compass+0, 0 
-	XORLW       6
-	BTFSC       STATUS+0, 2 
-	GOTO        L_main48
-;Blacky.c,135 :: 		TurnLeft();
-	CALL        _TurnLeft+0, 0
-;Blacky.c,136 :: 		} else {
-	GOTO        L_main49
-L_main48:
-;Blacky.c,137 :: 		MoveBackward(speed_veryfast);
-	MOVF        _speed_veryfast+0, 0 
-	MOVWF       FARG_MoveBackward_speed+0 
-	CALL        _MoveBackward+0, 0
-;Blacky.c,138 :: 		Delay_ms(500);
-	MOVLW       6
-	MOVWF       R11, 0
-	MOVLW       19
-	MOVWF       R12, 0
-	MOVLW       173
-	MOVWF       R13, 0
-L_main50:
-	DECFSZ      R13, 1, 1
-	BRA         L_main50
-	DECFSZ      R12, 1, 1
-	BRA         L_main50
-	DECFSZ      R11, 1, 1
-	BRA         L_main50
-	NOP
-	NOP
-;Blacky.c,139 :: 		}
-L_main49:
-;Blacky.c,140 :: 		} else if (left < MIN_SAFE_DISTANCE && front < MIN_SAFE_DISTANCE && right < MIN_SAFE_DISTANCE) {
-	GOTO        L_main51
-L_main47:
-	MOVLW       0
-	SUBWF       _left+1, 0 
-	BTFSS       STATUS+0, 2 
-	GOTO        L__main95
-	MOVLW       25
-	SUBWF       _left+0, 0 
-L__main95:
-	BTFSC       STATUS+0, 0 
-	GOTO        L_main54
-	MOVLW       0
-	SUBWF       _front+1, 0 
-	BTFSS       STATUS+0, 2 
-	GOTO        L__main96
-	MOVLW       25
-	SUBWF       _front+0, 0 
-L__main96:
-	BTFSC       STATUS+0, 0 
-	GOTO        L_main54
-	MOVLW       0
-	SUBWF       _right+1, 0 
-	BTFSS       STATUS+0, 2 
-	GOTO        L__main97
-	MOVLW       25
-	SUBWF       _right+0, 0 
-L__main97:
-	BTFSC       STATUS+0, 0 
-	GOTO        L_main54
-L__main80:
-;Blacky.c,141 :: 		MoveBackward(speed_veryfast);
-	MOVF        _speed_veryfast+0, 0 
-	MOVWF       FARG_MoveBackward_speed+0 
-	CALL        _MoveBackward+0, 0
-;Blacky.c,142 :: 		} else if (front > MIN_SAFE_DISTANCE && left > MIN_SAFE_DISTANCE && right > MIN_SAFE_DISTANCE) {
-	GOTO        L_main55
-L_main54:
-	MOVLW       0
-	MOVWF       R0 
-	MOVF        _front+1, 0 
-	SUBWF       R0, 0 
-	BTFSS       STATUS+0, 2 
-	GOTO        L__main98
-	MOVF        _front+0, 0 
-	SUBLW       25
-L__main98:
-	BTFSC       STATUS+0, 0 
-	GOTO        L_main58
-	MOVLW       0
-	MOVWF       R0 
-	MOVF        _left+1, 0 
-	SUBWF       R0, 0 
-	BTFSS       STATUS+0, 2 
-	GOTO        L__main99
-	MOVF        _left+0, 0 
-	SUBLW       25
-L__main99:
-	BTFSC       STATUS+0, 0 
-	GOTO        L_main58
-	MOVLW       0
-	MOVWF       R0 
-	MOVF        _right+1, 0 
-	SUBWF       R0, 0 
-	BTFSS       STATUS+0, 2 
-	GOTO        L__main100
-	MOVF        _right+0, 0 
-	SUBLW       25
-L__main100:
-	BTFSC       STATUS+0, 0 
-	GOTO        L_main58
-L__main79:
-;Blacky.c,143 :: 		if (initial_direction > current_direction && abs(initial_direction - current_direction) > 3) {
-	MOVF        _initial_direction+0, 0 
-	SUBWF       _current_direction+0, 0 
-	BTFSC       STATUS+0, 0 
-	GOTO        L_main61
-	MOVF        _current_direction+0, 0 
-	SUBWF       _initial_direction+0, 0 
-	MOVWF       FARG_abs_a+0 
-	CLRF        FARG_abs_a+1 
-	MOVLW       0
-	SUBWFB      FARG_abs_a+1, 1 
-	CALL        _abs+0, 0
-	MOVLW       128
-	MOVWF       R2 
-	MOVLW       128
-	XORWF       R1, 0 
-	SUBWF       R2, 0 
-	BTFSS       STATUS+0, 2 
-	GOTO        L__main101
-	MOVF        R0, 0 
-	SUBLW       3
-L__main101:
-	BTFSC       STATUS+0, 0 
-	GOTO        L_main61
-L__main78:
-;Blacky.c,144 :: 		if(cycle_compass != COMPASS_SPARCE) {
-	MOVF        _cycle_compass+0, 0 
-	XORLW       6
-	BTFSC       STATUS+0, 2 
-	GOTO        L_main62
-;Blacky.c,145 :: 		TurnRight();
-	CALL        _TurnRight+0, 0
-;Blacky.c,146 :: 		}
-L_main62:
-;Blacky.c,147 :: 		} else if (current_direction > initial_direction && abs(initial_direction - current_direction) > 3) {
-	GOTO        L_main63
-L_main61:
-	MOVF        _current_direction+0, 0 
-	SUBWF       _initial_direction+0, 0 
-	BTFSC       STATUS+0, 0 
-	GOTO        L_main66
-	MOVF        _current_direction+0, 0 
-	SUBWF       _initial_direction+0, 0 
-	MOVWF       FARG_abs_a+0 
-	CLRF        FARG_abs_a+1 
-	MOVLW       0
-	SUBWFB      FARG_abs_a+1, 1 
-	CALL        _abs+0, 0
-	MOVLW       128
-	MOVWF       R2 
-	MOVLW       128
-	XORWF       R1, 0 
-	SUBWF       R2, 0 
-	BTFSS       STATUS+0, 2 
-	GOTO        L__main102
-	MOVF        R0, 0 
-	SUBLW       3
-L__main102:
-	BTFSC       STATUS+0, 0 
-	GOTO        L_main66
-L__main77:
-;Blacky.c,148 :: 		if(cycle_compass != COMPASS_SPARCE) {
-	MOVF        _cycle_compass+0, 0 
-	XORLW       6
-	BTFSC       STATUS+0, 2 
-	GOTO        L_main67
-;Blacky.c,149 :: 		TurnLeft();
-	CALL        _TurnLeft+0, 0
-;Blacky.c,150 :: 		}
-L_main67:
-;Blacky.c,151 :: 		} else {
-	GOTO        L_main68
-L_main66:
-;Blacky.c,152 :: 		if (cycle_compass == COMPASS_SPARCE) {
-	MOVF        _cycle_compass+0, 0 
-	XORLW       6
-	BTFSS       STATUS+0, 2 
-	GOTO        L_main69
-;Blacky.c,153 :: 		MoveForward(0);
-	CLRF        FARG_MoveForward_speed+0 
-	CALL        _MoveForward+0, 0
-;Blacky.c,154 :: 		} else if (front < MIN_SLOW_DISTANCE){
-	GOTO        L_main70
-L_main69:
-	MOVLW       0
-	SUBWF       _front+1, 0 
-	BTFSS       STATUS+0, 2 
-	GOTO        L__main103
-	MOVLW       35
-	SUBWF       _front+0, 0 
-L__main103:
-	BTFSC       STATUS+0, 0 
-	GOTO        L_main71
-;Blacky.c,155 :: 		MoveForward(speed_veryslow);
-	MOVF        _speed_veryslow+0, 0 
-	MOVWF       FARG_MoveForward_speed+0 
-	CALL        _MoveForward+0, 0
-;Blacky.c,156 :: 		} else {
-	GOTO        L_main72
-L_main71:
-;Blacky.c,157 :: 		MoveForward(speed_veryfast);
-	MOVF        _speed_veryfast+0, 0 
-	MOVWF       FARG_MoveForward_speed+0 
-	CALL        _MoveForward+0, 0
-;Blacky.c,158 :: 		}
-L_main72:
-L_main70:
-;Blacky.c,159 :: 		}
-L_main68:
-L_main63:
-;Blacky.c,160 :: 		} else if (front > MIN_SAFE_DISTANCE) {
-	GOTO        L_main73
+;Blacky.c,151 :: 		} else if (front > MIN_SAFE_DISTANCE && left > MIN_SAFE_DISTANCE && right > MIN_SAFE_DISTANCE) {
+	GOTO        L_main59
 L_main58:
 	MOVLW       0
 	MOVWF       R0 
 	MOVF        _front+1, 0 
 	SUBWF       R0, 0 
 	BTFSS       STATUS+0, 2 
-	GOTO        L__main104
+	GOTO        L__main90
 	MOVF        _front+0, 0 
-	SUBLW       25
-L__main104:
+	SUBLW       20
+L__main90:
 	BTFSC       STATUS+0, 0 
-	GOTO        L_main74
-;Blacky.c,161 :: 		MoveForward(speed_veryfast);
+	GOTO        L_main62
+	MOVLW       0
+	MOVWF       R0 
+	MOVF        _left+1, 0 
+	SUBWF       R0, 0 
+	BTFSS       STATUS+0, 2 
+	GOTO        L__main91
+	MOVF        _left+0, 0 
+	SUBLW       20
+L__main91:
+	BTFSC       STATUS+0, 0 
+	GOTO        L_main62
+	MOVLW       0
+	MOVWF       R0 
+	MOVF        _right+1, 0 
+	SUBWF       R0, 0 
+	BTFSS       STATUS+0, 2 
+	GOTO        L__main92
+	MOVF        _right+0, 0 
+	SUBLW       20
+L__main92:
+	BTFSC       STATUS+0, 0 
+	GOTO        L_main62
+L__main71:
+;Blacky.c,152 :: 		if(abs(initial_direction - current_direction) > 4) {
+	MOVF        _current_direction+0, 0 
+	SUBWF       _initial_direction+0, 0 
+	MOVWF       FARG_abs_a+0 
+	CLRF        FARG_abs_a+1 
+	MOVLW       0
+	SUBWFB      FARG_abs_a+1, 1 
+	CALL        _abs+0, 0
+	MOVLW       128
+	MOVWF       R2 
+	MOVLW       128
+	XORWF       R1, 0 
+	SUBWF       R2, 0 
+	BTFSS       STATUS+0, 2 
+	GOTO        L__main93
+	MOVF        R0, 0 
+	SUBLW       4
+L__main93:
+	BTFSC       STATUS+0, 0 
+	GOTO        L_main63
+;Blacky.c,153 :: 		TurnRight();
+	CALL        _TurnRight+0, 0
+;Blacky.c,154 :: 		} else {
+	GOTO        L_main64
+L_main63:
+;Blacky.c,155 :: 		MoveForward(speed_veryfast);
 	MOVF        _speed_veryfast+0, 0 
 	MOVWF       FARG_MoveForward_speed+0 
 	CALL        _MoveForward+0, 0
+;Blacky.c,156 :: 		}
+L_main64:
+;Blacky.c,157 :: 		} else if (front > MIN_SAFE_DISTANCE) {
+	GOTO        L_main65
+L_main62:
+	MOVLW       0
+	MOVWF       R0 
+	MOVF        _front+1, 0 
+	SUBWF       R0, 0 
+	BTFSS       STATUS+0, 2 
+	GOTO        L__main94
+	MOVF        _front+0, 0 
+	SUBLW       20
+L__main94:
+	BTFSC       STATUS+0, 0 
+	GOTO        L_main66
+;Blacky.c,158 :: 		MoveForward(speed_veryfast);
+	MOVF        _speed_veryfast+0, 0 
+	MOVWF       FARG_MoveForward_speed+0 
+	CALL        _MoveForward+0, 0
+;Blacky.c,159 :: 		} else {
+	GOTO        L_main67
+L_main66:
+;Blacky.c,160 :: 		MoveBackward(speed_veryfast);
+	MOVF        _speed_veryfast+0, 0 
+	MOVWF       FARG_MoveBackward_speed+0 
+	CALL        _MoveBackward+0, 0
+;Blacky.c,161 :: 		Delay_ms(400);
+	MOVLW       5
+	MOVWF       R11, 0
+	MOVLW       15
+	MOVWF       R12, 0
+	MOVLW       241
+	MOVWF       R13, 0
+L_main68:
+	DECFSZ      R13, 1, 1
+	BRA         L_main68
+	DECFSZ      R12, 1, 1
+	BRA         L_main68
+	DECFSZ      R11, 1, 1
+	BRA         L_main68
 ;Blacky.c,162 :: 		}
-L_main74:
-L_main73:
+L_main67:
+L_main65:
+L_main59:
 L_main55:
-L_main51:
-L_main44:
-L_main37:
+L_main47:
+L_main39:
 ;Blacky.c,163 :: 		}
 L_main25:
 ;Blacky.c,165 :: 		if (test == 0) {
 	MOVLW       0
 	XORWF       _test+1, 0 
 	BTFSS       STATUS+0, 2 
-	GOTO        L__main105
+	GOTO        L__main95
 	MOVLW       0
 	XORWF       _test+0, 0 
-L__main105:
+L__main95:
 	BTFSS       STATUS+0, 2 
-	GOTO        L_main75
+	GOTO        L_main69
 ;Blacky.c,166 :: 		LATB.B0 = 0x01;
 	BSF         LATB+0, 0 
 ;Blacky.c,167 :: 		test = 1;
@@ -829,15 +831,15 @@ L__main105:
 	MOVLW       0
 	MOVWF       _test+1 
 ;Blacky.c,168 :: 		} else {
-	GOTO        L_main76
-L_main75:
+	GOTO        L_main70
+L_main69:
 ;Blacky.c,169 :: 		test = 0;
 	CLRF        _test+0 
 	CLRF        _test+1 
 ;Blacky.c,170 :: 		LATB.B0 = 0x00;
 	BCF         LATB+0, 0 
 ;Blacky.c,171 :: 		}
-L_main76:
+L_main70:
 ;Blacky.c,174 :: 		}
 	GOTO        L_main1
 ;Blacky.c,175 :: 		}

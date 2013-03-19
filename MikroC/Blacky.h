@@ -1,7 +1,7 @@
 #ifndef BLACKY_H
 #define BLACKY_H
 
-#define MIN_SAFE_DISTANCE 25
+#define MIN_SAFE_DISTANCE 20
 #define MIN_SLOW_DISTANCE 35
 #define MIN_LONG_DISTANCE 60
 #define COMPASS_SPARCE 6

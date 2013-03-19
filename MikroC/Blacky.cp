@@ -147,11 +147,11 @@ void main() {
  initial_direction = ReadCompass(0, compass_initial);
  }
  if (configuration == 1) {
- speed_veryfast = 7;
+ speed_veryfast = 0xFF;
  speed_veryslow = 3;
  enable_compass = 2;
  } else if (configuration == 2) {
- speed_veryfast = 7;
+ speed_veryfast = 0xFF;
  speed_veryslow = 3;
  enable_compass = 1;
  } else if (configuration == 3) {
@@ -163,7 +163,7 @@ void main() {
  speed_veryslow = 2;
  enable_compass = 1;
  } else if (configuration == 5) {
- speed_veryfast = 7;
+ speed_veryfast = 0xFF;
  speed_veryslow = 3;
  enable_compass = 0;
  } else if (configuration == 6) {
@@ -178,58 +178,58 @@ void main() {
  }
 
  if (start > 0) {
- if (front <  25  && right >=  25  && left >=  25 ) {
+ if (front <  20  && right >=  20  && left >=  20 ) {
  if (right > left) {
  if(cycle_compass !=  6 ) {
  TurnRight();
  } else {
  MoveBackward(speed_veryfast);
- Delay_ms(500);
+ Delay_ms(400);
+ TurnRight();
+ Delay_ms(100);
  }
  } else {
  if(cycle_compass !=  6 ) {
  TurnLeft();
  } else {
  MoveBackward(speed_veryfast);
- Delay_ms(500);
+ Delay_ms(400);
+ TurnLeft();
+ Delay_ms(100);
  }
  }
- } else if (right <  25  && front <  25  && left >=  25 ) {
+ } else if (right <  20  && front <  20  && left >=  20 ) {
  if(cycle_compass !=  6 ) {
  TurnRight();
  } else {
  MoveBackward(speed_veryfast);
- Delay_ms(500);
- }
- } else if (left <  25  && front <  25  && right >=  25 ) {
- if(cycle_compass !=  6 ) {
- TurnLeft();
- } else {
- MoveBackward(speed_veryfast);
- Delay_ms(500);
- }
- } else if (left <  25  && front <  25  && right <  25 ) {
- MoveBackward(speed_veryfast);
- } else if (front >  25  && left >  25  && right >  25 ) {
- if (initial_direction > current_direction && abs(initial_direction - current_direction) > 3) {
- if(cycle_compass !=  6 ) {
+ Delay_ms(400);
  TurnRight();
+ Delay_ms(100);
  }
- } else if (current_direction > initial_direction && abs(initial_direction - current_direction) > 3) {
+ } else if (left <  20  && front <  20  && right >=  20 ) {
  if(cycle_compass !=  6 ) {
  TurnLeft();
- }
  } else {
- if (cycle_compass ==  6 ) {
- MoveForward(0);
- } else if (front <  35 ){
- MoveForward(speed_veryslow);
+ MoveBackward(speed_veryfast);
+ Delay_ms(400);
+ TurnLeft();
+ Delay_ms(100);
+
+ }
+ } else if (left <  20  && front <  20  && right <  20 ) {
+ MoveBackward(speed_veryfast);
+ } else if (front >  20  && left >  20  && right >  20 ) {
+ if(abs(initial_direction - current_direction) > 4) {
+ TurnRight();
  } else {
  MoveForward(speed_veryfast);
  }
- }
- } else if (front >  25 ) {
+ } else if (front >  20 ) {
  MoveForward(speed_veryfast);
+ } else {
+ MoveBackward(speed_veryfast);
+ Delay_ms(400);
  }
  }
 
